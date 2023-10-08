@@ -23,7 +23,7 @@ const handleSignUpClick = () => {
                      <Components.Input type='text' placeholder='Name' />
                      <Components.Input type='email' placeholder='Email' />
                      <Components.Input type='password' placeholder='Password' />
-                     <Components.Input type='confirm_password' placeholder='Confirm Password' />
+                     <Components.Input type='password' placeholder='Confirm Password' />
                      <Components.Button>Sign Up</Components.Button>
                  </Components.Form>
              </Components.SignUpContainer>
