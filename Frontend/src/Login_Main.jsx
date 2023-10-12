@@ -1,20 +1,32 @@
-import React from "react";
+import React, { useState} from "react";
 import * as Components from './Login_Components';
 
 function Login_Main() {
+  const [signIn, toggle] = useState(true);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
+  const handleSignInClick = () => {
+    console.log("Sign In clicked");
+    toggle(true);
+  };
 
-    const handleSignInClick = () => {
-  console.log("Sign In clicked");
-  toggle(true);
+  const handleSignUpClick = () => {
+    console.log("Sign Up clicked");
+
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match");
+      return;
+    }
+    
+    setPasswordError('');                   //clears password error if passwords match
+
+    //put the sign up logic here
+
 };
+    const isSignUpDisabled = password !== confirmPassword;
 
-const handleSignUpClick = () => {
-  console.log("Sign Up clicked");
-  toggle(false);
-};
-
-    const [signIn, toggle] = React.useState(true);
      return(
          <Components.Container>
              <Components.SignUpContainer signinIn={signIn}>
@@ -22,9 +34,12 @@ const handleSignUpClick = () => {
                      <Components.Title>Create Account</Components.Title>
                      <Components.Input type='text' placeholder='Name' />
                      <Components.Input type='email' placeholder='Email' />
-                     <Components.Input type='password' placeholder='Password' />
-                     <Components.Input type='password' placeholder='Confirm Password' />
-                     <Components.Button>Sign Up</Components.Button>
+                     <Components.Input type='password' placeholder='Password' onChange={(e) => setPassword(e.target.value)}/>
+                     <Components.Input type='password' placeholder='Confirm Password' onChange={(e) => setConfirmPassword(e.target.value)}/>
+                     {password !== confirmPassword && (<span style ={{ color: 'red'}}> Passwords do not match</span>)}
+                     <Components.Button disabled={isSignUpDisabled} onClick={handleSignUpClick}>
+                        Sign Up
+                     </Components.Button>
                  </Components.Form>
              </Components.SignUpContainer>
 
