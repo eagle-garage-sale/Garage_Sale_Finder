@@ -14,8 +14,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
 
-# Secret key
-app.config['SECRET_KEY'] = secrets.token_hex(16)
+
 
 # Initialize database
 db = SQLAlchemy(app)
@@ -27,14 +26,18 @@ with app.app_context():
     db.create_all()
 
 
-rest_api = Api(version="1.0", title="users API")
+rest_api = Api()
 
 signup_model = rest_api.model('SignUpModel', {"username": fields.String(required=True, min_length=2, max_length=32),
                                               "email": fields.String(required=True, min_length=4, max_length=64),
                                               "password": fields.String(required=True, min_length=4, max_length=16)
                                               })
 
-@rest_api.route('/api/users/register')
+@app.route('/')
+def hello():
+    return "HELLO!"
+
+@rest_api.route('/api/users/register', endpoint = 'register')
 class Register(Resource):
     @rest_api.expect(signup_model, validate=True)
     def post(self):
@@ -49,3 +52,12 @@ class Register(Resource):
         if user_exists:
             return {"success": False,
                     "msg": "Email already taken"}, 400
+        
+        new_user = Users(1, username=_username, email=_email, password=_password)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return {"success": True,
+                "userID": new_user.id,
+                "msg": "The user was successfully registered"}, 200
