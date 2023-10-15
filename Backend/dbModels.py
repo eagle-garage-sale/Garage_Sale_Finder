@@ -10,7 +10,6 @@ class Users(db.Model):
     username = db.Column(db.String(25), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(300), nullable=False)
-    password = db.Column(db.String(25), nullable=False)
 
     def __repr__(self):
         return "<username %r>" % self.username
