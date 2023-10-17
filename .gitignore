@@ -1,6 +1,7 @@
 # Weird Python stuff #
 ######################
 *.pyc
+.venv/
 
 
 
@@ -22,6 +23,8 @@ dist-ssr
 *.local
 
 # Editor directories and files
+######################
+
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -32,3 +35,7 @@ dist-ssr
 *.sln
 *.sw?
 
+# database
+######################
+
+*.db
