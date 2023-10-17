@@ -11,7 +11,7 @@ should be around line 17
 Original issue here
 https://github.com/python-restx/flask-restx/issues/567
 
-HOW TO TEST BACKEND MANUALLY:
+<h1>HOW TO TEST BACKEND MANUALLY: </h1>
 
 This guide will go through how to test the registration route using Postman. This program is great for manual testing because you can save collections of various requests and is far easier to use than typing curl commands into a command line.
 
