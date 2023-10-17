@@ -19,7 +19,7 @@ This guide will go through how to test the registration route using Postman. Thi
 
 2. Make sure that your backend is running, to start it, activate your virtual environment (.venv\Scripts\Activate for windows systems). Then run your backend with flask --app app run
 
-3. You'll start the application on "My Workspace" On the left window,
+3. Postman starts you on "My Workspace". On the left window,
     click "New" and then "HTTP".
 
 4. Change your request type (GET, POST, PUT, DELETE) using the drop down menu that by default is set to "GET", set it to POST for this route.
