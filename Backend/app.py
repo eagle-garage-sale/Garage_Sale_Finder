@@ -4,16 +4,17 @@ import bleach
 from flask import Flask, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api, Resource, fields
+from flask_cors import CORS
 import jwt
 
 
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
 
 #Add Databases
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-
 
 
 
