@@ -7,6 +7,9 @@ function Login_Main() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  const [name, setName] = useState ('');
+  const [email, setEmail] = useState ('');
+
   const handleSignInClick = () => {
     console.log("Sign In clicked");
     toggle(true);
@@ -24,6 +27,30 @@ function Login_Main() {
 
     //put the sign up logic here
 
+    const userData = {
+        username: name,
+        email: email,
+        password: password,
+    }
+
+    fetch('http://127.0.0.1:5000/api/users/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('Registration successful');
+      } else {
+        console.error(data.msg);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
 };
     const isSignUpDisabled = password !== confirmPassword;
 
@@ -32,9 +59,9 @@ function Login_Main() {
              <Components.SignUpContainer signinIn={signIn}>
                  <Components.Form>
                      <Components.Title>Create Account</Components.Title>
-                     <Components.Input type='text' placeholder='Name' />
-                     <Components.Input type='email' placeholder='Email' />
-                     <Components.Input type='password' placeholder='Password' onChange={(e) => setPassword(e.target.value)}/>
+                     <Components.Input type='text' placeholder='Name' value = {name} onChange={(e) => setName(e.target.value)}/>
+                     <Components.Input type='email' placeholder='Email' value = {email} onChange={(e) => setEmail(e.target.value)}/>
+                     <Components.Input type='password' placeholder='Password' value = {password} onChange={(e) => setPassword(e.target.value)}/>
                      <Components.Input type='password' placeholder='Confirm Password' onChange={(e) => setConfirmPassword(e.target.value)}/>
                      {password !== confirmPassword && (<span style ={{ color: 'red'}}> Passwords do not match</span>)}
                      <Components.Button disabled={isSignUpDisabled} onClick={handleSignUpClick}>
