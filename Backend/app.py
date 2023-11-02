@@ -9,29 +9,33 @@ import jwt
 
 
 
+
+
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
 #Add Databases
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'
 
 
 
 # Initialize database
 db = SQLAlchemy(app)
 
-from dbModels import Users, GarageSales, images 
-
-
+from dbModels import Users, images, GarageSales
+from garageSaleDAO import GarageSaleDAO
 with app.app_context():
     db.create_all()
 
+AccessGarageSales = GarageSaleDAO()
 
 signup_model = api.model('SignUpModel', {"username": fields.String(required=True, min_length=2, max_length=32),
                                               "email": fields.String(required=True, min_length=4, max_length=64),
                                               "password": fields.String(required=True, min_length=4, max_length=16)
                                               })
+
+
 
 @app.route('/')
 def hello():
@@ -87,3 +91,52 @@ class Login(Resource):
             return {'success':True,  "msg":"login successful!"}, 200
         else:
             return {"success":False, "msg":"Invalid email or password"}, 401
+        
+
+#NOT MEANT TO BE AN ACTUAL ROUTE
+#Just something to test the Garage Sale DAO during development until automated testing is figured out
+#Note to team: Remove after sprint 2
+@app.route('/api/givefirstsale')
+def giveObject():
+
+    new_sale = GarageSales(location="76201", user_id = 1, start_date = "1111", 
+                               end_date = "2020", open_time = "8", close_time = "9", description = "tiki")
+
+    db.session.add(new_sale)
+    db.session.commit()
+
+    #Insert garage sale primary id argument to the GetGarageSaleById function to test out the 
+    #record obtaining functionality of the Garage Sale DAO
+    test_sale = AccessGarageSales.GetGarageSaleById(2)
+
+    if test_sale:
+        print (test_sale.description)
+        return {'success':True, "msg": "Garage Sale exists!"}, 200
+    
+    
+    #We are returning a success HTTP code because we don't want the user to see
+    #the lack of a search result as an error. 
+    else:
+        return {'success':False, "msg": "Garage Sale does not exists!"}, 200
+    
+
+@app.route('/api/returnsalesfromuser')
+def returnAllSalesFromUser():
+
+    sales = AccessGarageSales.GetGarageSalesByUserId(1)
+
+    print(sales)
+    if sales:
+        for sale in sales:
+            print (sale.description)
+        return {'success':True, "msg": "Garage Sale exists!"}, 200
+    
+    
+    #We are returning a success HTTP code because we don't want the user to see
+    #the lack of a search result as an error. 
+    else:
+        return {'success':False, "msg": "Garage Sale does not exists!"}, 200
+
+    
+
+

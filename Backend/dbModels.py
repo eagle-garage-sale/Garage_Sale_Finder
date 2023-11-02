@@ -25,6 +25,9 @@ class GarageSales(db.Model):
     close_time = db.Column(db.String(12), nullable = False)
     description = db.Column(db.String(500))
 
+    def __repr__(self):
+        return "<id %r>" % self.id
+
 
 #not sure how we are going to do image retrieval and storage for now, take this as theoretical.
 class images(db.Model):
