@@ -1,10 +1,15 @@
 import json
 from dbModels import GarageSales
 
-# The garage sale DAO will read an object from the data base and return a json object containing
+# The garage sale DAO will read an object from the database and return
+# either a GarageSale object or an array of said objects. The purpose of this
+# DAO is to perform CRUD operations on the database and to simplify readability
+# in the app routes file. A user DAO might later be created to further abstract
+# CRUD operations on the user table.
 
 
-#This will be an object that is returned upon database access
+# This will be an object that is can be returned upon reading a valid record
+# from the GarageSale table
 class GarageSale():
     def __init__(self, id, location, user_id, start_date, end_date, open_time, close_time, description):
         self.id = id
@@ -17,11 +22,14 @@ class GarageSale():
         self.description = description
 
 
-#The garage sale DAO contains a collection of functions designed to transform garage sale database information into a usable object. 
-#It also contains an array constructor that will then be converted to json data for frontend code to use to render listings
+# The garage sale DAO contains a collection of functions designed to transform garage sale database information 
+# into a usable Garage Sale object or an array of garage sale objects 
+#
 class GarageSaleDAO():
     
-    def GetGarageSaleById(self, saleId): 
+    # This getter funciton should only return a single Garagle Sale object
+    # as it searches by primary id
+    def GetGarageSaleBySaleId(self, saleId): 
         sale = GarageSales.query.filter_by(id = saleId).first()
         if sale:
             return GarageSale(sale.id, sale.location,
@@ -31,6 +39,7 @@ class GarageSaleDAO():
         else:
             return False
         
+    # Returns an array of garage sales by a single user id
     def GetGarageSalesByUserId(self, id):
         sales = GarageSales.query.filter_by(user_id = id).all()
         sale_collection = []

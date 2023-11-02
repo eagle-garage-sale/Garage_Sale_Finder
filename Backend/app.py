@@ -96,6 +96,8 @@ class Login(Resource):
 #NOT MEANT TO BE AN ACTUAL ROUTE
 #Just something to test the Garage Sale DAO during development until automated testing is figured out
 #Note to team: Remove after sprint 2
+
+"""
 @app.route('/api/givefirstsale')
 def giveObject():
 
@@ -138,5 +140,4 @@ def returnAllSalesFromUser():
         return {'success':False, "msg": "Garage Sale does not exists!"}, 200
 
     
-
-
+"""
