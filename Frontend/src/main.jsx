@@ -1,22 +1,29 @@
-/*import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
-*/
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import Login_Main from './Login_Main';
+import Maps from './Maps';
+import MapsButton from './MapsButton';
 import "./Login_styles.css";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
+const root = document.getElementById('root');
+
+//delete this later. It is used to render button on top of login component
+
+const WrapperComponent = () => (
+  <div>
+    <MapsButton/>
     <Login_Main/>
-  </React.StrictMode>
+  </div>
+);
+
+
+ReactDOM.render(
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<WrapperComponent />} />
+      <Route path="/maps" element={<Maps/>} />
+    </Routes>
+  </BrowserRouter>,
+  document.getElementById('root')
 );
