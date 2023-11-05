@@ -1,5 +1,6 @@
-import React, { useState} from "react";
+import React, { Component, useState} from "react";
 import * as Components from './Login_Components';
+import MapsButton from './MapsButton'
 
 function Login_Main() {
   const [signIn, toggle] = useState(true);
@@ -56,6 +57,7 @@ function Login_Main() {
 
      return(
          <Components.Container>
+            <MapsButton />
              <Components.SignUpContainer signinIn={signIn}>
                  <Components.Form>
                      <Components.Title>Create Account</Components.Title>
@@ -69,6 +71,7 @@ function Login_Main() {
                      </Components.Button>
                  </Components.Form>
              </Components.SignUpContainer>
+
 
              <Components.SignInContainer signinIn={signIn}>
                   <Components.Form>
