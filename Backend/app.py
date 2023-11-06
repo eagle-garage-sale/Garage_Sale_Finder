@@ -141,3 +141,33 @@ def returnAllSalesFromUser():
 
     
 """
+@app.route('/api/testJSON')
+def testJSON():
+    new_sale = GarageSales(location="76201", user_id = 1, start_date = "1111", 
+                               end_date = "2020", open_time = "8", close_time = "9", description = "tiki")
+
+    db.session.add(new_sale)
+    db.session.commit()
+
+    test_sale = AccessGarageSales.GetGarageSaleBySaleId(1)
+
+    return AccessGarageSales.convertGarageSaleToJSON(test_sale)
+
+@app.route('/api/testJSONList')
+def testJSONList():
+
+    new_sale = GarageSales(location="76201", user_id = 1, start_date = "1111", 
+                               end_date = "2020", open_time = "8", close_time = "9", description = "tiki")
+
+    db.session.add(new_sale)
+    db.session.commit()
+
+    new_sale = GarageSales(location="76301", user_id = 1, start_date = "1111", 
+                               end_date = "2025", open_time = "9", close_time = "11", description = "big")
+
+    db.session.add(new_sale)
+    db.session.commit()
+
+    test_collection = AccessGarageSales.GetGarageSalesByUserId(1)
+
+    return AccessGarageSales.convertGarageSaleListToJSON(test_collection)

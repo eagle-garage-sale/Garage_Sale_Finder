@@ -21,6 +21,10 @@ class GarageSale():
         self.close_time = close_time
         self.description = description
 
+    #Serializes the class to json when called
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
 
 # The garage sale DAO contains a collection of functions designed to transform garage sale database information 
 # into a usable Garage Sale object or an array of garage sale objects 
@@ -51,6 +55,18 @@ class GarageSaleDAO():
 
         return sale_collection
 
+    #Converts attributes of garage sale object to a json string
+    def convertGarageSaleToJSON(self, sale):
+        json_str = json.dumps(sale.toJson(), indent=9)
+        print(json_str)
+        return json_str
+    
+    #Builds json string from a collection of garage sales
+    def convertGarageSaleListToJSON(self, collection):
+        json_str = ""
+        for sale in collection:
+            json_str += self.convertGarageSaleToJSON(sale)
+        return json_str
 
         
     
