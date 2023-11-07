@@ -1,21 +1,17 @@
 import React from 'react';
-import styles from './Home';
+import './Home_Styles.css';
+import Maps from './Maps';
+import LoginButton from './LoginButton';
+import * as Components from './Home_Components';
 
 export default function Home() {
   return (
-    <div>
-      <div className="box-container">
-        <Box color="#3498db" title="Garage Sale Finder" content="Welcome!" />
+    <div className="home-text">
+      <LoginButton/>
+      <Components.header>Garage Sale Finder</Components.header>
+      <div className="left-column" />
+      <Maps />
       </div>
-    </div>
   );
 }
 
-const Box = ({ color, title, content }) => {
-  return (
-    <div className="box" style={{ backgroundColor: color }}>
-      <h2>{title}</h2>
-      <p>{content}</p>
-    </div>
-  );
-};
