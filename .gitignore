@@ -35,7 +35,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# database
+# database and text files
 ######################
-
+*.txt
 *.db
