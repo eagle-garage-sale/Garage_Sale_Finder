@@ -30,6 +30,15 @@ with app.app_context():
 
 AccessGarageSales = GarageSaleDAO()
 
+garagesale_model = api.model('GarageSaleModel', {"location": fields.String(required=True, min_length=2, max_length=100),
+                                              "user id": fields.Integer(required=True),
+                                              "start date": fields.String(required=True, min_length=4, max_length=12),
+                                              "end date": fields.String(required=True, min_length=4, max_length=12),
+                                              "open time": fields.String(required=True, min_length=4, max_length=12),
+                                              "close time": fields.String(required=True, min_length=4, max_length=12),
+                                              "description": fields.String(required=True, min_length=4, max_length=500)
+                                              })
+
 signup_model = api.model('SignUpModel', {"username": fields.String(required=True, min_length=2, max_length=32),
                                               "email": fields.String(required=True, min_length=4, max_length=64),
                                               "password": fields.String(required=True, min_length=4, max_length=16)
@@ -40,6 +49,33 @@ signup_model = api.model('SignUpModel', {"username": fields.String(required=True
 @app.route('/')
 def hello():
     return "HELLO!"
+
+@api.route('/api/garagesales/register', endpoint = 'garagesales_register')
+class GarageSalesRegister(Resource):
+    @api.expect(garagesale_model, validate=True)
+    def post(self):
+
+        req_data = request.get_json()
+        print(req_data)
+
+        _location = req_data.get("location")
+        _user_id = req_data.get("user_id")
+        _start_date = req_data.get("start_date")
+        _end_date = req_data.get("end_date")
+        _open_time = req_data.get("open_time")
+        _close_time = req_data.get("close_time")
+        _description = req_data.get("description")
+
+        new_sale = GarageSales(location = _location, user_id = _user_id, start_date = _start_date, end_date = _end_date, open_time = _open_time, close_time = _close_time, description = _description)
+
+        db.session.add(new_sale)
+        db.session.commit()
+
+        return {"success": True,
+                "garageSaleID": new_sale.id,
+                "msg": "The garage sale was successfully registered"}, 200
+
+
 
 @api.route('/api/users/register', endpoint = 'register')
 class Register(Resource):
