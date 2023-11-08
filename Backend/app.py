@@ -6,6 +6,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api, Resource, fields
 from flask_cors import CORS
 import jwt
+from MakeJWT import CreateJWT
+import ReadKeys
+import AuthorizationFilters
 
 
 
@@ -18,7 +21,7 @@ CORS(app)
 #Add Databases
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'
 
-
+keys = ReadKeys.ExtractKeys('keys.txt')
 
 # Initialize database
 db = SQLAlchemy(app)
@@ -119,91 +122,14 @@ class Login(Resource):
 
         # Check if the email exists in the database
         user = Users.query.filter_by(email=_email).first()
+        
 
         # if both email and password are present, then check if the password is the same with the one in database
         if user and user.password == _password:
-            #Generate a JSON web token for authentication
-            #token = jwt({"user_id": user.id}, 'secret_key', algorithm='HS256')
+            token = CreateJWT(user.id, _email, _password, keys[1])
+            print (token)
             return {'success':True,  "msg":"login successful!"}, 200
         else:
             return {"success":False, "msg":"Invalid email or password"}, 401
         
 
-#NOT MEANT TO BE AN ACTUAL ROUTE
-#Just something to test the Garage Sale DAO during development until automated testing is figured out
-#Note to team: Remove after sprint 2
-
-"""
-@app.route('/api/givefirstsale')
-def giveObject():
-
-    new_sale = GarageSales(location="76201", user_id = 1, start_date = "1111", 
-                               end_date = "2020", open_time = "8", close_time = "9", description = "tiki")
-
-    db.session.add(new_sale)
-    db.session.commit()
-
-    #Insert garage sale primary id argument to the GetGarageSaleById function to test out the 
-    #record obtaining functionality of the Garage Sale DAO
-    test_sale = AccessGarageSales.GetGarageSaleById(2)
-
-    if test_sale:
-        print (test_sale.description)
-        return {'success':True, "msg": "Garage Sale exists!"}, 200
-    
-    
-    #We are returning a success HTTP code because we don't want the user to see
-    #the lack of a search result as an error. 
-    else:
-        return {'success':False, "msg": "Garage Sale does not exists!"}, 200
-    
-
-@app.route('/api/returnsalesfromuser')
-def returnAllSalesFromUser():
-
-    sales = AccessGarageSales.GetGarageSalesByUserId(1)
-
-    print(sales)
-    if sales:
-        for sale in sales:
-            print (sale.description)
-        return {'success':True, "msg": "Garage Sale exists!"}, 200
-    
-    
-    #We are returning a success HTTP code because we don't want the user to see
-    #the lack of a search result as an error. 
-    else:
-        return {'success':False, "msg": "Garage Sale does not exists!"}, 200
-
-    
-"""
-@app.route('/api/testJSON')
-def testJSON():
-    new_sale = GarageSales(location="76201", user_id = 1, start_date = "1111", 
-                               end_date = "2020", open_time = "8", close_time = "9", description = "tiki")
-
-    db.session.add(new_sale)
-    db.session.commit()
-
-    test_sale = AccessGarageSales.GetGarageSaleBySaleId(1)
-
-    return AccessGarageSales.convertGarageSaleToJSON(test_sale)
-
-@app.route('/api/testJSONList')
-def testJSONList():
-
-    new_sale = GarageSales(location="76201", user_id = 1, start_date = "1111", 
-                               end_date = "2020", open_time = "8", close_time = "9", description = "tiki")
-
-    db.session.add(new_sale)
-    db.session.commit()
-
-    new_sale = GarageSales(location="76301", user_id = 1, start_date = "1111", 
-                               end_date = "2025", open_time = "9", close_time = "11", description = "big")
-
-    db.session.add(new_sale)
-    db.session.commit()
-
-    test_collection = AccessGarageSales.GetGarageSalesByUserId(1)
-
-    return AccessGarageSales.convertGarageSaleListToJSON(test_collection)

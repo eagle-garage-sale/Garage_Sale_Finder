@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function MapsButton() {
+export default function HomeButton() {
     const buttonStyle = {
         position: 'absolute',
-        left: '100px',
+        left: '600px',
         top: '10px',
         zIndex: 1,
     };
 
     return (
-        <Link to ="/maps">
+        <Link to ="/home">
             <button>
-                Go To Maps
+                Go Home
             </button>
         </Link>
     );

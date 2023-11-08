@@ -1,0 +1,17 @@
+import React from 'react';
+import './Home_Styles.css';
+import Maps from './Maps';
+import LoginButton from './LoginButton';
+import * as Components from './Home_Components';
+
+export default function Home() {
+  return (
+    <div className="home-text">
+      <LoginButton/>
+      <Components.header>Garage Sale Finder</Components.header>
+      <div className="left-column" />
+      <Maps />
+      </div>
+  );
+}
+
