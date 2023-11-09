@@ -2,7 +2,7 @@ import React from 'react';
 import LoginButton from './LoginButton';
 import './Navbar.css';
 
-const Navbar = () => {
+export default function Navbar() {
     return (
         <nav className='navbar'>
             <LoginButton/>
