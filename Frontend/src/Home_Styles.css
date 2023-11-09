@@ -1,22 +1,75 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
 
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; 
+}
+
+
 .home-text {
     background: #f6f5f7;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: "Montserrat", sans-serif;
     height: 100vh;
-  }
+    flex-direction: row;
+    overflow: hidden;
+}
 
-  .left-column {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 350px;
-    background-color: #baf2cd;
-    z-index: 5;
-    text-align: left;
-  }
+.right-column {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.left-column {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto; /* Enable vertical scrolling for the left column */
+}
+
+.map-container {
+  height: 100%;
+  width: 100%;
+}
+
+.navbar {
+  z-index: 1000;
+  position: fixed;
+}
+
+/* Yelp Like listings */
+
+.listing {
+  list-style: none;
+  padding-top: 120px;
+}
+
+.listing-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.listing-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.listing-details {
+  flex: 1;
+}
+
+.listing-details h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.listing-details p {
+  font-size: 14px;
+  margin: 0;
+}
