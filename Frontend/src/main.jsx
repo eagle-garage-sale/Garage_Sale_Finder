@@ -6,6 +6,7 @@ import Home from './Home';
 import LoginButton from './LoginButton'
 import "./Login_styles.css";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AddListing from './AddListing';
 
 const root = document.getElementById('root');
 
@@ -22,6 +23,7 @@ ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/form" element={<AddListing/>} />
       <Route path="/login" element={<Login_Main/>}  />
     </Routes>
   </BrowserRouter>,
