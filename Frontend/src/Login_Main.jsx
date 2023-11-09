@@ -12,15 +12,37 @@ function Login_Main() {
 
   const handleSignInClick = () => {
     console.log("Sign In clicked");
-    toggle(true);
+    const userData = {
+        email: email,
+        password: password,
+    }
+
+    fetch('http://127.0.0.1:5000/api/users/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('Login successful');
+      } else {
+        console.error(data.msg);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
   };
 
   const handleSignUpClick = () => {
     console.log("Sign Up clicked");
 
     if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match");
-      return;
+        
     }
     
     setPasswordError('');                   //clears password error if passwords match
@@ -74,10 +96,10 @@ function Login_Main() {
              <Components.SignInContainer signinIn={signIn}>
                   <Components.Form>
                       <Components.Title>Sign in</Components.Title>
-                      <Components.Input type='email' placeholder='Email' />
-                      <Components.Input type='password' placeholder='Password' />
+                      <Components.Input type='email' placeholder='Email' value = {email} onChange={(e) => setEmail(e.target.value)} />
+                      <Components.Input type='password' placeholder='Password' value = {password} onChange={(e) => setPassword(e.target.value)}/>
                       <Components.Anchor href='#'>Forgot your password?</Components.Anchor>
-                      <Components.Button>Sign In</Components.Button>
+                      <Components.Button onClick={handleSignInClick}>Sign In</Components.Button>
                   </Components.Form>
              </Components.SignInContainer>
 
