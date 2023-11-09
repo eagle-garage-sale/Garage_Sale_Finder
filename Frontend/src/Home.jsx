@@ -2,6 +2,8 @@ import React from 'react';
 import './Home_Styles.css';
 import Maps from './Maps';
 import Navbar from './Navbar'
+import LoginButton from './LoginButton';
+import AddListingButton from './AddListingButton';
 import * as Components from './Home_Components';
 
 export default function Home() {
@@ -110,6 +112,11 @@ export default function Home() {
       </div>  
       <div className='right-column'>
         <Maps />
+      <LoginButton/>
+      <AddListingButton/>
+      <Components.header>Garage Sale Finder</Components.header>
+      <div className="left-column" />
+      <Maps />
       </div>
     </div>
   );
