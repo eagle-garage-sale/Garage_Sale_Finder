@@ -24,7 +24,16 @@ overflow: hidden;
 width: 700px;
 max-width: 100%;
 min-height: 100px;
-margin: 20px auto; /* Add margin to space out the containers */
+margin-top: 100px;
+margin-bottom: 10px:
+justify-content: center;
+/* Add margin to space out the containers */
+`;
+
+export const CenteredWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 50px auto;
 `;
 
 export const TinyContainer = styled.div`
@@ -36,12 +45,13 @@ overflow: hidden;
 width: 300px;
 max-width: 100%;
 min-height: 100px;
+margin: 10px ;
 `;
 
 export const ContainerWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin: 60px auto;
+  justify-content: center;
+  margin: 50px auto;
 `;
 
 export const Form = styled.form`
@@ -87,6 +97,8 @@ font-size: 12px;
 font-weight: bold;
 padding: 12px 45px;
 letter-spacing: 1px;
+margin: -10px auto;
+margin-left: 805px;
 text-transform: uppercase;
 transition: transform 80ms ease-in;
 &:active{
