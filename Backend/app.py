@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api, Resource, fields
 from flask_cors import CORS
 import jwt
-from MakeJWT import CreateJWT
+from JWT import CreateJWT, extract_id
 import ReadKeys
 import AuthorizationFilters
 
@@ -155,8 +155,6 @@ class Login(Resource):
 
             #Create JWT token and send back to the user. They will need this for future transactions with the website.
             token = CreateJWT(user.id, _email, _password, keys[1])
-            #debuging purposes
-            print (token)
             return {'success':True,  "msg":"login successful!", "jwt": token}, 200
         else:
             return {"success":False, "msg":"Invalid email or password"}, 401
