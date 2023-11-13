@@ -157,7 +157,7 @@ class Login(Resource):
             token = CreateJWT(user.id, _email, _password, keys[1])
             #debuging purposes
             print (token)
-            return {'success':True,  "msg":"login successful!"}, 200
+            return {'success':True,  "msg":"login successful!", "jwt": token}, 200
         else:
             return {"success":False, "msg":"Invalid email or password"}, 401
         
