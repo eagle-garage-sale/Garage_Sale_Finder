@@ -1,5 +1,5 @@
 import jwt
-from jwt.exceptions import ExpiredSignatureError
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError, InvalidSignatureError, InvalidKeyError, MissingRequiredClaimError
 
 # Generate JWT token with important user info (id, email, and password) as payloads.
 # These values can be extracted from the token, and will be useful for features such
@@ -27,6 +27,22 @@ def decodeJWT(JWT,secretKey):
         return payload
 
     except ExpiredSignatureError as error:
+        print(f'Unable to decode the token, error: {error}')
+        return False
+    
+    except InvalidTokenError as error:
+        print(f'Unable to decode the token, error: {error}')
+        return False
+    
+    except InvalidKeyError as error:
+        print(f'Unable to decode the token, error: {error}')
+        return False
+    
+    except InvalidSignatureError as error:
+        print(f'Unable to decode the token, error: {error}')
+        return False
+    
+    except MissingRequiredClaimError as error:
         print(f'Unable to decode the token, error: {error}')
         return False
     
