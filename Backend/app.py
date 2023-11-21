@@ -74,27 +74,35 @@ class GarageSalesRegister(Resource):
         # Get JSON string submitted by user
         req_data = request.get_json()
 
-        #Take values from specified JSON keys
-        _location = req_data.get("location")
-        _user_id = req_data.get("user_id")
-        _start_date = req_data.get("start_date")
-        _end_date = req_data.get("end_date")
-        _open_time = req_data.get("open_time")
-        _close_time = req_data.get("close_time")
-        _description = req_data.get("description")
+        if req_data.get("jwt") is None:
+            # Return HTTP code 401 (unauthorized) upon completion. 
+                return {"success": False,
+                        "msg": "Unauthorized!"}, 401
+        
+        else:
+            token = req_data.get("jwt")
+            
+            #Take values from specified JSON keys and get the user_id from jwt token
+            _location = req_data.get("location")
+            _user_id = extract_id(token, keys[1])
+            _start_date = req_data.get("start_date")
+            _end_date = req_data.get("end_date")
+            _open_time = req_data.get("open_time")
+            _close_time = req_data.get("close_time")
+            _description = req_data.get("description")
 
 
-        # Make a new garage sale object from the values specified above
-        new_sale = GarageSales(user_id = _user_id, location = _location,  start_date = _start_date, end_date = _end_date, open_time = _open_time, close_time = _close_time, description = _description)
+            # Make a new garage sale object from the values specified above
+            new_sale = GarageSales(user_id = _user_id, location = _location,  start_date = _start_date, end_date = _end_date, open_time = _open_time, close_time = _close_time, description = _description)
 
-        # Perform insertion query to GarageSales table and finalize query.
-        db.session.add(new_sale)
-        db.session.commit()
+            # Perform insertion query to GarageSales table and finalize query.
+            db.session.add(new_sale)
+            db.session.commit()
 
-        # Return HTTP code 200 (success) upon completion. 
-        return {"success": True,
-                "garageSaleID": new_sale.id,
-                "msg": "The garage sale was successfully registered"}, 200
+            # Return HTTP code 200 (success) upon completion. 
+            return {"success": True,
+                    "garageSaleID": new_sale.id,
+                    "msg": "The garage sale was successfully registered"}, 200
 
 
 
