@@ -15,6 +15,7 @@ function AddListing() {
 
         const garageData = {
             location: location,
+            user_id: 1,
             start_date: startDate,
             end_date: endDate,
             open_time: openTime,
@@ -46,12 +47,16 @@ function AddListing() {
 
             <Components.header>Add Garage Sale Listing</Components.header>
 
+            <Components.CenteredWrapper>
+
             <Components.Container>
                 <Components.Form>
                     <Components.Title>Address</Components.Title>
                     <Components.Input type='location' placeholder='Street Address' value = {location} onChange={(e) => setLocation(e.target.value)}/>
                 </Components.Form>
             </Components.Container>
+
+            </Components.CenteredWrapper>
 
             <Components.ContainerWrapper>
 
@@ -89,12 +94,22 @@ function AddListing() {
 
             </Components.ContainerWrapper>
 
+            <Components.CenteredWrapper>
+
             <Components.Container>
                 <Components.Form>
                     <Components.Title>Description</Components.Title>
                     <Components.DescriptionInput type='description' placeholder='500 Characters Max' value = {description} onChange={(e) => setDescription(e.target.value)}/>
                 </Components.Form>
             </Components.Container>
+
+            </Components.CenteredWrapper>
+
+            <Components.Button onClick={handleButtonClick}>
+            Add Listing
+            </Components.Button>
+             
+    
 
         </div>
     )
