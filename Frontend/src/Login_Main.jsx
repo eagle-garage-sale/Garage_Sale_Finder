@@ -55,7 +55,8 @@ function Login_Main() {
     const isSignUpDisabled = password !== confirmPassword;
 
      return(
-         <Components.Container>
+         <div className="center-content">
+            <Components.Container>
              <Components.SignUpContainer signinIn={signIn}>
                  <Components.Form>
                      <Components.Title>Create Account</Components.Title>
@@ -108,6 +109,7 @@ function Login_Main() {
              </Components.OverlayContainer>
 
          </Components.Container>
+         </div>
      )
 }
 
