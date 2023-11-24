@@ -9,9 +9,8 @@ export default function Navbar() {
             <div className='title'>
                 <h1>Garage Sale Finder</h1>
             </div>
-            <div className='login-container'>
-                <LoginButton className="login-button"/>
-            </div>
+            <LoginButton/>
+            <AddListingButton/>
         </nav>
     );
 };

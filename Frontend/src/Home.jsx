@@ -112,8 +112,6 @@ export default function Home() {
       </div>  
       <div className='right-column'>
         <Maps />
-      <LoginButton/>
-      <AddListingButton/>
       <Components.header>Garage Sale Finder</Components.header>
       <div className="left-column" />
       <Maps />
