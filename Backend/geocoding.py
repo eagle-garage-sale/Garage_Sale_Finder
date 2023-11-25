@@ -20,10 +20,11 @@ def ObtainGeoCodingApiData(streetaddr, city, state, zipcode, key):
     conn = http.client.HTTPConnection('api.positionstack.com')
 
     params = urllib.parse.urlencode({
-        'access_key': key,
-        'query': streetaddr + ', ' + city + ' ' + state + ', ' + zipcode,
+        'access_key': str(key),
+        'query': str(streetaddr + ', ' + city + ' ' + state + ', ' + zipcode),
         'limit': 1,
     })
+
 
     conn.request('GET', '/v1/forward?{}'.format(params))
 
@@ -40,6 +41,7 @@ def ObtainCoordinates(geocodingData):
     #obtain latitude and longitude from geocodingData
     latitude = json_extract(json.loads(geocodingData), 'latitude')
     longitude = json_extract(json.loads(geocodingData), 'longitude')
+
 
     #Convert them from a "list" to a floating point value.
     latitude = latitude[0]
