@@ -3,7 +3,7 @@ import http.client
 import urllib.parse
 import json
 import string
-from app import keys
+
 
 
 
@@ -16,11 +16,11 @@ We just want the coordinates, but the ObtainCoordinates function will handle ext
 We might want the other data from the api later.
 '''
 
-def ObtainGeoCodingApiData(streetaddr, city, state, zipcode):
+def ObtainGeoCodingApiData(streetaddr, city, state, zipcode, key):
     conn = http.client.HTTPConnection('api.positionstack.com')
 
     params = urllib.parse.urlencode({
-        'access_key': keys[2],
+        'access_key': key,
         'query': streetaddr + ', ' + city + ' ' + state + ', ' + zipcode,
         'limit': 1,
     })

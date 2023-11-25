@@ -11,7 +11,10 @@ from dbModels import GarageSales
 # This will be an object that is can be returned upon reading a valid record
 # from the GarageSale table
 class GarageSale():
-    def __init__(self, id, street_address, state, city, zip_code, user_id, start_date, end_date, open_time, close_time, description):
+    def __init__(self, id, street_address, state, city, zip_code, 
+                 user_id, start_date, end_date, 
+                 open_time, close_time, description, latitude, longitude):
+        
         self.id = id
         self.street_address = street_address
         self.state = state
@@ -23,6 +26,8 @@ class GarageSale():
         self.open_time = open_time
         self.close_time = close_time
         self.description = description
+        self.latitude = latitude
+        self.longitude = longitude
 
     #Serializes the class to json when called
     def toJson(self):
@@ -43,7 +48,7 @@ class GarageSaleDAO():
                               sale.city, sale.zip_code,
                               sale.user_id, sale.start_date,
                               sale.end_date, sale.open_time, sale.close_time,
-                              sale.description)
+                              sale.description, sale.latitude, sale.longitude)
         else:
             return False
         
@@ -55,7 +60,8 @@ class GarageSaleDAO():
         for sale in sales:
             entry = GarageSale(sale.id, sale.street_address, sale.state, 
                               sale.city, sale.zip_code, sale.user_id, sale.start_date, 
-                               sale.end_date, sale.open_time, sale.close_time, sale.description)
+                               sale.end_date, sale.open_time, sale.close_time, 
+                               sale.description, sale.latitude, sale.longitude)
             sale_collection.append(entry)
 
         return sale_collection

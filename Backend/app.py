@@ -101,12 +101,12 @@ class GarageSalesRegister(Resource):
             _close_time = req_data.get("close_time")
             _description = req_data.get("description")
 
-            locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code)
+            locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
             coordinates = ObtainCoordinates(locationInfo)
 
 
             # Make a new garage sale object from the values specified above
-            new_sale = GarageSales(user_id = _user_id, street_adress = _street_address,
+            new_sale = GarageSales(street_adress = _street_address,
                                    state = _state, city = _city, _zip_code = _zip_code,
                                      user_id = _user_id, start_date = _start_date,
                                        end_date = _end_date, open_time = _open_time,
