@@ -9,6 +9,7 @@ import jwt
 from JWT import CreateJWT, extract_id
 import ReadKeys
 import AuthorizationFilters
+from geocoding import ObtainCoordinates, ObtainGeoCodingApiData
 
 
 
@@ -41,13 +42,19 @@ AccessGarageSales = GarageSaleDAO()
 
 # api models ensure that data provided by front end matches these specifications. JSON keys must match the
 # names of these values in order for this to work.
-garagesale_model = api.model('GarageSaleModel', {"location": fields.String(required=True, min_length=2, max_length=100),
-                                              "user_id": fields.Integer(required=True),
-                                              "start_date": fields.String(required=True, min_length=4, max_length=12),
-                                              "end_date": fields.String(required=True, min_length=4, max_length=12),
-                                              "open_time": fields.String(required=True, min_length=4, max_length=12),
-                                              "close_time": fields.String(required=True, min_length=4, max_length=12),
-                                              "description": fields.String(required=True, min_length=4, max_length=500)
+garagesale_model = api.model('GarageSaleModel', {
+                                                "street_address": fields.String(required=True, min_length=5, max_length=100),
+                                                "state": fields.String(required = True, min_length = 2, max_length = 3),
+                                                "city": fields.String(required = True, min_length = 2, max_length = 30),
+                                                "zip_code": fields.String(required = True, min_length = 5, max_length = 10),
+                                                "user_id": fields.Integer(required=True),
+                                                "start_date": fields.String(required=True, min_length=4, max_length=12),
+                                                "end_date": fields.String(required=True, min_length=4, max_length=12),
+                                                "open_time": fields.String(required=True, min_length=4, max_length=12),
+                                                "close_time": fields.String(required=True, min_length=4, max_length=12),
+                                                "description": fields.String(required=True, min_length=4, max_length=500),
+                                                "latitude": fields.String(required = True, min_length = 3, max_length = 30),
+                                                "longitude": fields.String(required = True, min_length = 3, max_length = 30),
                                               })
 
 signup_model = api.model('SignUpModel', {"username": fields.String(required=True, min_length=2, max_length=32),
@@ -83,7 +90,10 @@ class GarageSalesRegister(Resource):
             token = req_data.get("jwt")
             
             #Take values from specified JSON keys and get the user_id from jwt token
-            _location = req_data.get("location")
+            _street_address = req_data.get("street_address")
+            _state = req_data.get("state")
+            _city = req_data.get("city")
+            _zip_code = req_data.get("zip_code")
             _user_id = extract_id(token, keys[1])
             _start_date = req_data.get("start_date")
             _end_date = req_data.get("end_date")
@@ -91,9 +101,17 @@ class GarageSalesRegister(Resource):
             _close_time = req_data.get("close_time")
             _description = req_data.get("description")
 
+            locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code)
+            coordinates = ObtainCoordinates(locationInfo)
+
 
             # Make a new garage sale object from the values specified above
-            new_sale = GarageSales(user_id = _user_id, location = _location,  start_date = _start_date, end_date = _end_date, open_time = _open_time, close_time = _close_time, description = _description)
+            new_sale = GarageSales(user_id = _user_id, street_adress = _street_address,
+                                   state = _state, city = _city, _zip_code = _zip_code,
+                                     user_id = _user_id, start_date = _start_date,
+                                       end_date = _end_date, open_time = _open_time,
+                                         close_time = _close_time, description = _description,
+                                         latitude = coordinates[0], longitude = coordinates[1])
 
             # Perform insertion query to GarageSales table and finalize query.
             db.session.add(new_sale)

@@ -56,13 +56,18 @@ class Users(db.Model):
 class GarageSales(db.Model):
     __tablename__ = "garage_sales"
     id = db.Column(db.Integer, primary_key = True)
-    location = db.Column(db.String(100), nullable = False)
+    street_address = db.Column(db.String(100), nullable = False)
+    state = db.Column(db.String(3), nullable = False)
+    city = db.Column(db.String(30), nullable = False)
+    zip_code = db.Column(db.String(10), nullable = False)
     user_id = db.Column(ForeignKey("user_accounts.id"))
     start_date = db.Column(db.String(12), nullable = False)
     end_date = db.Column(db.String(12), nullable = False)
     open_time = db.Column(db.String(12), nullable = False)
     close_time = db.Column(db.String(12), nullable = False)
     description = db.Column(db.String(500))
+    latitude = db.Column(db.String(30), nullable = False)
+    longitude = db.Column(db.String(30), nullable = False)
 
     def __repr__(self):
         return "<id %r>" % self.id
