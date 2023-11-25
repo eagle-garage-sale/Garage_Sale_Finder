@@ -11,9 +11,12 @@ from dbModels import GarageSales
 # This will be an object that is can be returned upon reading a valid record
 # from the GarageSale table
 class GarageSale():
-    def __init__(self, id, location, user_id, start_date, end_date, open_time, close_time, description):
+    def __init__(self, id, street_address, state, city, zip_code, user_id, start_date, end_date, open_time, close_time, description):
         self.id = id
-        self.location = location
+        self.street_address = street_address
+        self.state = state
+        self.city = city
+        self.zip_code = zip_code
         self.user_id = user_id
         self.start_date = start_date
         self.end_date = end_date
@@ -36,7 +39,8 @@ class GarageSaleDAO():
     def GetGarageSaleBySaleId(self, saleId): 
         sale = GarageSales.query.filter_by(id = saleId).first()
         if sale:
-            return GarageSale(sale.id, sale.location,
+            return GarageSale(sale.id, sale.street_address, sale.state, 
+                              sale.city, sale.zip_code,
                               sale.user_id, sale.start_date,
                               sale.end_date, sale.open_time, sale.close_time,
                               sale.description)
@@ -49,7 +53,8 @@ class GarageSaleDAO():
         sale_collection = []
 
         for sale in sales:
-            entry = GarageSale(sale.id, sale.location, sale.user_id, sale.start_date, 
+            entry = GarageSale(sale.id, sale.street_address, sale.state, 
+                              sale.city, sale.zip_code, sale.user_id, sale.start_date, 
                                sale.end_date, sale.open_time, sale.close_time, sale.description)
             sale_collection.append(entry)
 
