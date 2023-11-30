@@ -3,7 +3,10 @@ import * as Components from './AddListing_Components';
 
 
 function AddListing() {
-    const [location, setLocation] = useState('');
+    const [streetAddress, setStreetAddress] = useState('');
+    const [state, setState] = useState('');
+    const [city, setCity] = useState('');
+    const [zipcode, setZipcode] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [openTime, setOpenTime] = useState('');
@@ -14,7 +17,10 @@ function AddListing() {
         console.log("Button clicked");
 
         const garageData = {
-            location: location,
+            street_address: streetAddress,
+            state: state,
+            city: city,
+            zip_code: zipcode,
             user_id: 1,
             start_date: startDate,
             end_date: endDate,
@@ -52,7 +58,11 @@ function AddListing() {
             <Components.Container>
                 <Components.Form>
                     <Components.Title>Address</Components.Title>
-                    <Components.Input type='location' placeholder='Street Address' value = {location} onChange={(e) => setLocation(e.target.value)}/>
+                    <Components.Input type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
+                    <Components.Input type='State (EX: OR, TX, FL)' placeholder='State' value = {state} onChange={(e) => setState(e.target.value)}/>
+                    <Components.Input type='City' placeholder='City' value = {city} onChange={(e) => setCity(e.target.value)}/>
+                    <Components.Input type='Zipcode' placeholder='Zipcode' value = {zipcode} onChange={(e) => setZipcode(e.target.value)}/>
+                    
                 </Components.Form>
             </Components.Container>
 
