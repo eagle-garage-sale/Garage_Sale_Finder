@@ -65,6 +65,20 @@ class GarageSaleDAO():
             sale_collection.append(entry)
 
         return sale_collection
+    
+    #Get all garage sales in db
+    def GetGarageSalesByUserId(self):
+        sales = GarageSales.query.all()
+        sale_collection = []
+
+        for sale in sales:
+            entry = GarageSale(sale.id, sale.street_address, sale.state, 
+                              sale.city, sale.zip_code, sale.user_id, sale.start_date, 
+                               sale.end_date, sale.open_time, sale.close_time, 
+                               sale.description, sale.latitude, sale.longitude)
+            sale_collection.append(entry)
+
+        return sale_collection
 
     #Converts attributes of garage sale object to a json string
     def convertGarageSaleToJSON(self, sale):
