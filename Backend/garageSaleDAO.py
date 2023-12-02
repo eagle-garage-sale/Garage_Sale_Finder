@@ -67,7 +67,7 @@ class GarageSaleDAO():
         return sale_collection
     
     #Get all garage sales in db
-    def GetGarageSalesByUserId(self):
+    def GetGarageSales(self):
         sales = GarageSales.query.all()
         sale_collection = []
 
