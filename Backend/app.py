@@ -41,7 +41,10 @@ AccessGarageSales = GarageSaleDAO()
 
 # api models ensure that data provided by front end matches these specifications. JSON keys must match the
 # names of these values in order for this to work.
-garagesale_model = api.model('GarageSaleModel', {"location": fields.String(required=True, min_length=2, max_length=100),
+garagesale_model = api.model('GarageSaleModel', {"street_address": fields.String(required=True, min_length=5, max_length=100),
+                                                 "state": fields.String(required=True, min_length=2, max_length=2),
+                                                 "city": fields.String(required=True, min_length=1, max_length=100),
+                                                 "zip_code": fields.String(required=True, min_length=5, max_length=10),
                                               "user_id": fields.Integer(required=True),
                                               "start_date": fields.String(required=True, min_length=4, max_length=12),
                                               "end_date": fields.String(required=True, min_length=4, max_length=12),
@@ -175,8 +178,8 @@ class Login(Resource):
             return {"success":False, "msg":"Invalid email or password"}, 401
         
 @api.route('/api/home/sales', endpoint='sales')
-class PullSales():
-    def PullSales(self):
+class PullSales(Resource):
+    def post(self):
         salesCollection = AccessGarageSales.GetGarageSales()
         GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
         return {'success': True, "msg":"Successfully got garage sale list!", "sales": GarageSaleJSON}, 200
