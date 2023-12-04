@@ -14,7 +14,7 @@ export default function GetListingJSON() {
     .then(data => {
       if (data.success) {
         console.log(data.sales);
-        ListingJSON = data.sales;
+        let ListingJSON = data.sales;
         return ListingJSON;
       } else {
         console.error(data.msg);

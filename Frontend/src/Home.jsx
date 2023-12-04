@@ -4,13 +4,13 @@ import Maps from './Maps';
 import Navbar from './Navbar'
 import LoginButton from './LoginButton';
 import AddListingButton from './AddListingButton';
-import GetListingJSON from './DisplayListings';
 import * as Components from './Home_Components';
+import GetListingJSON  from './DisplayListings';
 
 
 
 export default function Home() {
-  GetListingJSON()
+  GetListingJSON();
   return (
     <div className="home-text">
       <Navbar/>
@@ -22,7 +22,6 @@ export default function Home() {
               <h3>1. Garage Sale Name</h3>
               <p>Category: Antiques</p>
               <p>Address: 123 Main St, City</p>
-              <p>Days</p>
             </div>
           </li>
         </ul>

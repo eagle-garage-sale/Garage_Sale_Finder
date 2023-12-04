@@ -182,6 +182,7 @@ class PullSales(Resource):
     def post(self):
         salesCollection = AccessGarageSales.GetGarageSales()
         GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
+        print (GarageSaleJSON)
         return {'success': True, "msg":"Successfully got garage sale list!", "sales": GarageSaleJSON}, 200
 
 #1. Get Sales from database and put into array
