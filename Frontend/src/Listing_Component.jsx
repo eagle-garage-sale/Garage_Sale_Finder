@@ -1,37 +1,12 @@
 import React, { Component, useState} from "react";
 import * as Components from './Login_Components';
 
-
-function GetListingJSON() {
-    fetch('http://127.0.0.1:5000/api/home/sales', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        console.log(data.sales);
-        let ListingJSON = data.sales;
-        return ListingJSON;
-      } else {
-        console.error(data.msg);
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
-
-};
-
 export default function ShowListing(props)
 {
-    const displayListings = listings.map((props) => (
+    return (
         <div className='listing-details' key={props.id}>
             <h3>
-                {props.id} {props.description}
+                 {props.description}
             </h3>
             <p>
                 Address: {props.street_address}, {props.state}
@@ -43,9 +18,8 @@ export default function ShowListing(props)
                 Open From: {props.open_time} - {props.close_time}
             </p>
         </div>
-    ));
+    );
 
-    return <div>{displayListings}</div>;
 }
 
 /*"{"id": 1,
