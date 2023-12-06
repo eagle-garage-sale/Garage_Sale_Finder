@@ -88,9 +88,17 @@ class GarageSaleDAO():
     
     #Builds json string from a collection of garage sales
     def convertGarageSaleListToJSON(self, collection):
-        json_str = ""
+        json_str = "["
+        i = 0
+
         for sale in collection:
-            json_str += self.convertGarageSaleToJSON(sale)
+            if len(collection) > 1 and i < len(collection) - 1:
+                json_str += self.convertGarageSaleToJSON(sale) + ','
+            else:
+                json_str += self.convertGarageSaleToJSON(sale)
+            i += 1
+
+        json_str +=']'
         return json_str
 
         

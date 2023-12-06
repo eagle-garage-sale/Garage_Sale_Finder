@@ -1,5 +1,5 @@
 import secrets
-import bleach
+
 
 from flask import Flask, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
@@ -10,7 +10,6 @@ from JWT import CreateJWT, extract_id
 import ReadKeys
 import AuthorizationFilters
 from geocoding import ObtainCoordinates, ObtainGeoCodingApiData
-
 
 
 
@@ -42,18 +41,16 @@ AccessGarageSales = GarageSaleDAO()
 
 # api models ensure that data provided by front end matches these specifications. JSON keys must match the
 # names of these values in order for this to work.
-garagesale_model = api.model('GarageSaleModel', {
-                                                "street_address": fields.String(required=True, min_length=5, max_length=100),
-                                                "state": fields.String(required = True, min_length = 2, max_length = 3),
-                                                "city": fields.String(required = True, min_length = 2, max_length = 30),
-                                                "zip_code": fields.String(required = True, min_length = 5, max_length = 10),
-                                                "user_id": fields.Integer(required=True),
-                                                "start_date": fields.String(required=True, min_length=4, max_length=12),
-                                                "end_date": fields.String(required=True, min_length=4, max_length=12),
-                                                "open_time": fields.String(required=True, min_length=4, max_length=12),
-                                                "close_time": fields.String(required=True, min_length=4, max_length=12),
-                                                "description": fields.String(required=False, min_length=4, max_length=500),
-                                                
+garagesale_model = api.model('GarageSaleModel', {"street_address": fields.String(required=True, min_length=5, max_length=100),
+                                                 "state": fields.String(required=True, min_length=2, max_length=2),
+                                                 "city": fields.String(required=True, min_length=1, max_length=100),
+                                                 "zip_code": fields.String(required=True, min_length=5, max_length=10),
+                                              "user_id": fields.Integer(required=True),
+                                              "start_date": fields.String(required=True, min_length=4, max_length=12),
+                                              "end_date": fields.String(required=True, min_length=4, max_length=12),
+                                              "open_time": fields.String(required=True, min_length=4, max_length=12),
+                                              "close_time": fields.String(required=True, min_length=4, max_length=12),
+                                              "description": fields.String(required=True, min_length=4, max_length=500)
                                               })
 
 signup_model = api.model('SignUpModel', {"username": fields.String(required=True, min_length=2, max_length=32),
@@ -114,6 +111,8 @@ class GarageSalesRegister(Resource):
         return {"success": True,
                 "garageSaleID": new_sale.id,
                 "msg": "The garage sale was successfully registered"}, 200
+
+
 
 
 
@@ -178,4 +177,14 @@ class Login(Resource):
         else:
             return {"success":False, "msg":"Invalid email or password"}, 401
         
+@api.route('/api/home/sales', endpoint='sales')
+class PullSales(Resource):
+    def post(self):
+        salesCollection = AccessGarageSales.GetGarageSales()
+        GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
+        print (GarageSaleJSON)
+        return {'success': True, "msg":"Successfully got garage sale list!", "sales": GarageSaleJSON}, 200
 
+#1. Get Sales from database and put into array
+#2. Convert array to json
+#3. Create an api route
