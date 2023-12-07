@@ -66,6 +66,7 @@ class GarageSales(db.Model):
     open_time = db.Column(db.String(12), nullable = False)
     close_time = db.Column(db.String(12), nullable = False)
     description = db.Column(db.String(500))
+    keywords = db.Column(db.String(1000), nullable = True)
     latitude = db.Column(db.String(30), nullable = False)
     longitude = db.Column(db.String(30), nullable = False)
 

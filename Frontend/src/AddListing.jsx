@@ -45,6 +45,7 @@ function AddListing() {
             open_time: openTime,
             close_time: closeTime,
             description: description,
+            keywords: tags
         }
         fetch('http://127.0.0.1:5000/api/garagesales/register', {
             method: 'POST',

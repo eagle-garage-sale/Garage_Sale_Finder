@@ -50,7 +50,8 @@ garagesale_model = api.model('GarageSaleModel', {"street_address": fields.String
                                               "end_date": fields.String(required=True, min_length=4, max_length=12),
                                               "open_time": fields.String(required=True, min_length=4, max_length=12),
                                               "close_time": fields.String(required=True, min_length=4, max_length=12),
-                                              "description": fields.String(required=True, min_length=4, max_length=500)
+                                              "description": fields.String(required=True, min_length=4, max_length=500),
+                                              "keywords": fields.String(required=True, min_length =4, max_length=1000)
                                               })
 
 signup_model = api.model('SignUpModel', {"username": fields.String(required=True, min_length=2, max_length=32),
@@ -90,6 +91,7 @@ class GarageSalesRegister(Resource):
         _open_time = req_data.get("open_time")
         _close_time = req_data.get("close_time")
         _description = req_data.get("description")
+        _keywords = req_data.get("keywords")
         locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
         coordinates = ObtainCoordinates(locationInfo)
 
@@ -100,7 +102,7 @@ class GarageSalesRegister(Resource):
                                 state = _state, city = _city, zip_code = _zip_code,
                                     user_id = _user_id, start_date = _start_date,
                                     end_date = _end_date, open_time = _open_time,
-                                        close_time = _close_time, description = _description,
+                                        close_time = _close_time, description = _description, keywords = _keywords,
                                         latitude = coordinates[0], longitude = coordinates[1])
 
         # Perform insertion query to GarageSales table and finalize query.
