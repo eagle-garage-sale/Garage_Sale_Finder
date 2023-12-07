@@ -11,15 +11,23 @@ from dbModels import GarageSales
 # This will be an object that is can be returned upon reading a valid record
 # from the GarageSale table
 class GarageSale():
-    def __init__(self, id, location, user_id, start_date, end_date, open_time, close_time, description):
+    def __init__(self, id, street_address, state, city, zip_code, 
+                 user_id, start_date, end_date, 
+                 open_time, close_time, description, latitude, longitude):
+        
         self.id = id
-        self.location = location
+        self.street_address = street_address
+        self.state = state
+        self.city = city
+        self.zip_code = zip_code
         self.user_id = user_id
         self.start_date = start_date
         self.end_date = end_date
         self.open_time = open_time
         self.close_time = close_time
         self.description = description
+        self.latitude = latitude
+        self.longitude = longitude
 
     #Serializes the class to json when called
     def toJson(self):
@@ -36,10 +44,11 @@ class GarageSaleDAO():
     def GetGarageSaleBySaleId(self, saleId): 
         sale = GarageSales.query.filter_by(id = saleId).first()
         if sale:
-            return GarageSale(sale.id, sale.location,
+            return GarageSale(sale.id, sale.street_address, sale.state, 
+                              sale.city, sale.zip_code,
                               sale.user_id, sale.start_date,
                               sale.end_date, sale.open_time, sale.close_time,
-                              sale.description)
+                              sale.description, sale.latitude, sale.longitude)
         else:
             return False
         
@@ -49,8 +58,24 @@ class GarageSaleDAO():
         sale_collection = []
 
         for sale in sales:
-            entry = GarageSale(sale.id, sale.location, sale.user_id, sale.start_date, 
-                               sale.end_date, sale.open_time, sale.close_time, sale.description)
+            entry = GarageSale(sale.id, sale.street_address, sale.state, 
+                              sale.city, sale.zip_code, sale.user_id, sale.start_date, 
+                               sale.end_date, sale.open_time, sale.close_time, 
+                               sale.description, sale.latitude, sale.longitude)
+            sale_collection.append(entry)
+
+        return sale_collection
+    
+    #Get all garage sales in db
+    def GetGarageSales(self):
+        sales = GarageSales.query.all()
+        sale_collection = []
+
+        for sale in sales:
+            entry = GarageSale(sale.id, sale.street_address, sale.state, 
+                              sale.city, sale.zip_code, sale.user_id, sale.start_date, 
+                               sale.end_date, sale.open_time, sale.close_time, 
+                               sale.description, sale.latitude, sale.longitude)
             sale_collection.append(entry)
 
         return sale_collection
@@ -63,9 +88,17 @@ class GarageSaleDAO():
     
     #Builds json string from a collection of garage sales
     def convertGarageSaleListToJSON(self, collection):
-        json_str = ""
+        json_str = "["
+        i = 0
+
         for sale in collection:
-            json_str += self.convertGarageSaleToJSON(sale)
+            if len(collection) > 1 and i < len(collection) - 1:
+                json_str += self.convertGarageSaleToJSON(sale) + ','
+            else:
+                json_str += self.convertGarageSaleToJSON(sale)
+            i += 1
+
+        json_str +=']'
         return json_str
 
         

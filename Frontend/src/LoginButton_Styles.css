@@ -1,21 +1,17 @@
-button.loginbutton {
-    margin: auto;
-    background-color: #70c773;
-    color: white;
-    padding: 8.6px 20px; 
-    font-size: 16px; 
-    border: none; 
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    position: fixed;
-    top: 43%;
-    right: 20px; 
-    transform: translateY(-1150%); /* Center vertically */
-    z-index: 700;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
 button.loginbutton:hover {
     background-color: #45a049; /* Darker green color on hover */
+}
+
+button.loginbutton {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
   }
