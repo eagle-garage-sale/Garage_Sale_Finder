@@ -1,5 +1,5 @@
 import json
-from dbModels import GarageSales
+from project.dbModels import GarageSales
 
 # The garage sale DAO will read an object from the database and return
 # either a GarageSale object or an array of said objects. The purpose of this

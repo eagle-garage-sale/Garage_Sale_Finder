@@ -1,5 +1,6 @@
-from app import db
+from project import db
 from sqlalchemy import ForeignKey
+
 
 # Here is a collection of classes that do two things,
 #   1. Format database tables
@@ -38,6 +39,9 @@ TL;DR to add a new entry:
 For more information on other CRUD operations (create, read, update, delete) using SQLAlchemy, refer to app.py comments
 or refer to sqlalchemy documentation to https://docs.sqlalchemy.org/en/20/orm/quickstart.html#simple-select
 '''
+
+#Add Databases
+
 
 
 # User table model
