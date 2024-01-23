@@ -7,7 +7,7 @@ from flask_restx import Api, fields, Resource
 db = SQLAlchemy()
 
 
-
+#Factory function, this function can be called from anywhere to start a session
 def create_app():
     from project.ReadKeys import ExtractKeys
     app = Flask(__name__)
@@ -27,7 +27,7 @@ def create_app():
     else:
         app.logger.info('Database already contains the users table')
 
-    #AccessGarageSales = GarageSaleDAO()
+    AccessGarageSales = GarageSaleDAO()
 
 
     from project.dbModels import Users, GarageSales
@@ -64,7 +64,7 @@ def create_app():
 
     @app.route('/')
     def hello():
-        return "HELLO!"
+        return {"HELLO!"}, 200
 
     # Add garage sale entry
     @api.route('/api/garagesales/register', endpoint = 'garagesale_register')
