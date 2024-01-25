@@ -3,6 +3,7 @@ import sqlalchemy as sa
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api, fields, Resource
+from flask_cors import CORS
 
 db = SQLAlchemy()
 
@@ -39,6 +40,7 @@ def create_app():
     from project.garageSaleDAO import GarageSaleDAO
     AccessGarageSales = GarageSaleDAO()
     api = Api(app)
+    CORS(app)
     # api models ensure that data provided by front end matches these specifications. JSON keys must match the
     # names of these values in order for this to work.
     garagesale_model = api.model('GarageSaleModel', {"street_address": fields.String(required=True, min_length=5, max_length=100),
@@ -65,7 +67,7 @@ def create_app():
 
     @app.route('/')
     def hello():
-        return {"data": "HELLO!"}, 200
+        return {"msg": "HELLO!"}, 200
 
     # Add garage sale entry
     @api.route('/api/garagesales/register', endpoint = 'garagesale_register')
@@ -90,6 +92,7 @@ def create_app():
             _open_time = req_data.get("open_time")
             _close_time = req_data.get("close_time")
             _description = req_data.get("description")
+            print(keys[2])
             locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
             coordinates = ObtainCoordinates(locationInfo)
 
