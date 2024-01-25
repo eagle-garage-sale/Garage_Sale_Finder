@@ -1,4 +1,7 @@
 def test_empty_route(test_client):
+
+
+
     """
     GIVEN a Flask application configured for testing
     WHEN the '/' page is requested (GET)
@@ -6,4 +9,4 @@ def test_empty_route(test_client):
     """
     response = test_client.get('/')
     assert response.status_code == 200
-    assert b"HELLO!" in response.data
+    

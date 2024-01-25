@@ -27,7 +27,7 @@ def create_app():
     else:
         app.logger.info('Database already contains the users table')
 
-    AccessGarageSales = GarageSaleDAO()
+    
 
 
     from project.dbModels import Users, GarageSales
@@ -37,6 +37,7 @@ def create_app():
     import project.ReadKeys
     from project.geocoding import ObtainCoordinates, ObtainGeoCodingApiData
     from project.garageSaleDAO import GarageSaleDAO
+    AccessGarageSales = GarageSaleDAO()
     api = Api(app)
     # api models ensure that data provided by front end matches these specifications. JSON keys must match the
     # names of these values in order for this to work.
@@ -64,7 +65,7 @@ def create_app():
 
     @app.route('/')
     def hello():
-        return {"HELLO!"}, 200
+        return {"data": "HELLO!"}, 200
 
     # Add garage sale entry
     @api.route('/api/garagesales/register', endpoint = 'garagesale_register')
@@ -189,6 +190,7 @@ def create_app():
     #3. Create an api route
 
     return app
+
 
 
 def initialize_extensions(app):
