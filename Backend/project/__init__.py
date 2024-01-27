@@ -8,41 +8,43 @@ from flask_cors import CORS
 db = SQLAlchemy()
 
 
-#Factory function, this function can be called from anywhere to start a session
+#Factory function, this function can be called from anywhere to start the application
 def create_app():
     from project.ReadKeys import ExtractKeys
     app = Flask(__name__)
+
+    #The following two lines setup the apps configuration, which can be
+    #found in config.py.
     config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
     app.config.from_object(config_type)
 
+    #Save all our neccessary keys to an array.
     keys = ExtractKeys('keys.txt')
-
-    # Check if the database needs to be initialized
-    engine = sa.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-    inspector = sa.inspect(engine)
-    if not inspector.has_table("user_accounts"):
-        with app.app_context():
-            db.drop_all()
-            db.create_all()
-            app.logger.info('Initialized the database!')
-    else:
-        app.logger.info('Database already contains the users table')
-
-    
 
 
     from project.dbModels import Users, GarageSales
+
+    #Only extension is SQLAlchemy, this ties it to the session
     initialize_extensions(app)
     
+    
+
+
+   
+    #Now that the app has started, we can make our imports
     from project.JWT import CreateJWT, decodeJWT
-    import project.ReadKeys
     from project.geocoding import ObtainCoordinates, ObtainGeoCodingApiData
     from project.garageSaleDAO import GarageSaleDAO
+
+    #This object is how we will manipulate our collection of garage sales in memory
+    #It's also our way of converting this data to JSON for frontend delivery
     AccessGarageSales = GarageSaleDAO()
-    api = Api(app)
-    CORS(app)
+
     # api models ensure that data provided by front end matches these specifications. JSON keys must match the
     # names of these values in order for this to work.
+    api = Api(app)
+    CORS(app)
+    
     garagesale_model = api.model('GarageSaleModel', {"street_address": fields.String(required=True, min_length=5, max_length=100),
                                                         "state": fields.String(required=True, min_length=2, max_length=2),
                                                         "city": fields.String(required=True, min_length=1, max_length=100),
@@ -80,7 +82,6 @@ def create_app():
             req_data = request.get_json()
 
 
-            
             #Take values from specified JSON keys and get the user_id from jwt token
             _street_address = req_data.get("street_address")
             _state = req_data.get("state")
@@ -199,6 +200,7 @@ def create_app():
 def initialize_extensions(app):
     db.init_app(app)
     with app.app_context():
+        db.drop_all()
         db.create_all()
 
     
