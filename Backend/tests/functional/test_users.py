@@ -11,7 +11,7 @@ def test_valid_registration(test_client):
     response = post_json(test_client, '/api/users/register', {
         "username":"bigeeeee",
         "email": "bige@bige.com",
-        "password": "ThisshitS1csk"
+        "password": "oHyEs95@"
     })
     assert response.status_code == 200
 
@@ -25,7 +25,7 @@ def test_valid_login(test_client):
 
     response = post_json(test_client, '/api/users/login', {
         "email":"bige@bige.com",
-        "password": "ThisshitS1csk"
+        "password": "oHyEs95@"
     })
 
     assert response.status_code == 200
