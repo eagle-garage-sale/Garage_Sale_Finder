@@ -120,17 +120,14 @@ function AddListing() {
                            </Components.Tag>
                          )}
                         />
+                    <Components.Button onClick={handleButtonClick}>
+                    Add Listing
+                    </Components.Button>
                 </Components.Form>
             </Components.Container>
             
             
             </Components.CenteredWrapper>
-             
-            <Components.Button onClick={handleButtonClick}>
-            Add Listing
-            </Components.Button>
-    
-
         </div>
     )
 }
