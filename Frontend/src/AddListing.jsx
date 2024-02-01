@@ -20,6 +20,8 @@ function AddListing() {
                      'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI',
                      'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
+    const suggestions = ['tag1', 'tag2', 'tag3', 'tag4'];
+
     const handleTagDelete = (i) => {
         const newTags = [...tags];
         newTags.splice(i, 1);
@@ -112,6 +114,7 @@ function AddListing() {
                     <Components.Title>Keywords</Components.Title>
                     <ReactTags
                        tags={tags}
+                       suggestions={suggestions}
                        handleDelete={handleTagDelete}
                        handleAddition={handleTagAddition}
                        renderTag={({ tag, onDelete, index }) => (
