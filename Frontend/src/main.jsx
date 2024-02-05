@@ -7,6 +7,7 @@ import LoginButton from './LoginButton'
 import "./Login_styles.css";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AddListing from './AddListing';
+import EditListing from './EditListing.jsx';
 
 const root = document.getElementById('root');
 
@@ -25,6 +26,7 @@ ReactDOM.render(
       <Route path="/" element={<Home />} />
       <Route path="/form" element={<AddListing/>} />
       <Route path="/login" element={<Login_Main/>}  />
+      <Route path="/editlisting" element={<EditListing/>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
