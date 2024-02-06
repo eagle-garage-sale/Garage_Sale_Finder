@@ -1,4 +1,7 @@
 import React, {Component, useState} from "react";
+import { render } from 'react-dom';
+import { KEYWORDS } from './keywords';
+import './tagstyle.css';
 import * as Components from './AddListing_Components';
 import { WithContext as ReactTags } from 'react-tag-input';
 
@@ -13,6 +16,7 @@ function AddListing() {
     const [closeTime, setCloseTime] = useState('');
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const states = [ 'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
                      'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
@@ -20,20 +24,54 @@ function AddListing() {
                      'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI',
                      'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
-    const suggestions = ['tag1', 'tag2', 'tag3', 'tag4'];
+    const suggestions = KEYWORDS.map((keywords) => {
+        return {
+            id: keywords,
+            text: keywords,
+        };
+    });
 
-    const handleTagDelete = (i) => {
-        const newTags = [...tags];
-        newTags.splice(i, 1);
-        setTags(newTags);
-    };
-    
-    const handleTagAddition = (tag) => {
-        const newTags = [...tags, tag];
-        setTags(newTags);
+    const KeyCodes = {
+        comma: 188,
+        enter: 13,
       };
+      
+    const delimiters = [KeyCodes.comma, KeyCodes.enter];
+
+    const handleDelete = (i) => {
+        setTags(tags.filter((tag, index) => index !== i));
+    };
+
+    const handleAddition = (tag) => {
+        if (suggestions.some(suggestedTag => suggestedTag.text === tag.text)) {
+            // Add the tag only if it's in the suggestions
+            setTags([...tags, tag]);
+          }
+  };
+
+  const handleDrag = (tag, currPos, newPos) => {
+    const newTags = tags.slice();
+
+    newTags.splice(currPos, 1);
+    newTags.splice(newPos, 0, tag);
+
+    // re-render
+    setTags(newTags);
+  };
+
+  const handleTagClick = (index) => {
+    console.log('The tag at index ' + index + ' was clicked');
+  };
     
-    const handleButtonClick = () => {
+    const handleButtonClick = (e) => {
+        e.preventDefault();
+        if (streetAddress.trim() === '' || city.trim() === '' || state.trim() === '' || zipcode.trim() === '') {
+            setErrorMessage('Please enter a valid address.');
+            return; // Stop further execution if there's an error
+        }
+
+        // Clear any previous error message
+        setErrorMessage('');        
         console.log("Button clicked");
 
         const garageData = {
@@ -59,6 +97,7 @@ function AddListing() {
         .then(data => {
             if(data.success) {
                 console.log('Registration successful');
+                window.location.reload();
             } else {
                 console.error(data.msg);
             }
@@ -79,6 +118,7 @@ function AddListing() {
                 <Components.Form>
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
+                    {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
                     <Components.Select type='State' placeholder='State' value = {state} onChange={(e) => setState(e.target.value)}>
                         <option value ='' disabled>State</option>
                         {states.map((stateOption, index) => (
@@ -115,13 +155,13 @@ function AddListing() {
                     <ReactTags
                        tags={tags}
                        suggestions={suggestions}
-                       handleDelete={handleTagDelete}
-                       handleAddition={handleTagAddition}
-                       renderTag={({ tag, onDelete, index }) => (
-                           <Components.Tag key={index} onClick={() => onDelete(index)}>
-                             {tag.text}
-                           </Components.Tag>
-                         )}
+                       delimiters={delimiters}
+                       handleDelete={handleDelete}
+                       handleAddition={handleAddition}
+                       handleDrag={handleDrag}
+                       handleTagClick={handleTagClick}
+                       inputFieldPosition="top"
+                       autocomplete
                         />
                     <Components.Button onClick={handleButtonClick}>
                     Add Listing
