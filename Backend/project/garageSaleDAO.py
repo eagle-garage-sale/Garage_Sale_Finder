@@ -13,7 +13,7 @@ from project.dbModels import GarageSales
 class GarageSale():
     def __init__(self, id, street_address, state, city, zip_code, 
                  user_id, start_date, end_date, 
-                 open_time, close_time, description, latitude, longitude):
+                 open_time, close_time, description, keywords, latitude, longitude):
         
         self.id = id
         self.street_address = street_address
@@ -26,6 +26,7 @@ class GarageSale():
         self.open_time = open_time
         self.close_time = close_time
         self.description = description
+        self.keywords = keywords
         self.latitude = latitude
         self.longitude = longitude
 
@@ -48,7 +49,7 @@ class GarageSaleDAO():
                               sale.city, sale.zip_code,
                               sale.user_id, sale.start_date,
                               sale.end_date, sale.open_time, sale.close_time,
-                              sale.description, sale.latitude, sale.longitude)
+                              sale.description, sale.keywords, sale.latitude, sale.longitude)
         else:
             return False
         
@@ -61,7 +62,7 @@ class GarageSaleDAO():
             entry = GarageSale(sale.id, sale.street_address, sale.state, 
                               sale.city, sale.zip_code, sale.user_id, sale.start_date, 
                                sale.end_date, sale.open_time, sale.close_time, 
-                               sale.description, sale.latitude, sale.longitude)
+                               sale.description, sale.keywords, sale.latitude, sale.longitude)
             sale_collection.append(entry)
 
         return sale_collection
@@ -75,7 +76,7 @@ class GarageSaleDAO():
             entry = GarageSale(sale.id, sale.street_address, sale.state, 
                               sale.city, sale.zip_code, sale.user_id, sale.start_date, 
                                sale.end_date, sale.open_time, sale.close_time, 
-                               sale.description, sale.latitude, sale.longitude)
+                               sale.description, sale.keywords, sale.latitude, sale.longitude)
             sale_collection.append(entry)
 
         return sale_collection
