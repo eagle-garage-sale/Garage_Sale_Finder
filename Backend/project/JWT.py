@@ -17,7 +17,8 @@ def CreateJWT(id, email, password, secretKey):
    token = jwt.encode(payload=payload_data, key=secretKey, algorithm='HS256')
    return token
 
-# This decodes the JWT, with a successful decoding the function will return true.
+
+# This decodes the JWT, with a successful decoding the function will return the payload
 # Exception handling needs to be improved to handle most of the JWT decoding 
 # exceptions, such as invalid signatures as an example.
 def decodeJWT(JWT,secretKey):
