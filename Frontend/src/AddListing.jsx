@@ -65,13 +65,18 @@ function AddListing() {
     
     const handleButtonClick = (e) => {
         e.preventDefault();
-        if (streetAddress.trim() === '' || city.trim() === '' || state.trim() === '' || zipcode.trim() === '') {
-            setErrorMessage('Please enter a valid address.');
+
+        setErrorMessage('');   
+
+        if (streetAddress.trim() === '') {
+            setErrorMessage('Please enter a street address');
             return; // Stop further execution if there's an error
         }
-
-        // Clear any previous error message
-        setErrorMessage('');        
+        if (state.trim() === '') {
+            setErrorMessage('Please enter a state');
+            return;
+        }
+     
         console.log("Button clicked");
 
         const garageData = {
@@ -118,8 +123,9 @@ function AddListing() {
                 <Components.Form>
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
-                    {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+                    {errorMessage && <div style={{ color: 'red', marginTop: '1px' }}>{errorMessage}</div>}
                     <Components.Select type='State' placeholder='State' value = {state} onChange={(e) => setState(e.target.value)}>
+                    {errorMessage && <div style={{ color: 'red', marginTop: '1px' }}>{errorMessage}</div>}
                         <option value ='' disabled>State</option>
                         {states.map((stateOption, index) => (
                              <option key={index} value={stateOption}>{stateOption}</option>
@@ -160,7 +166,7 @@ function AddListing() {
                        handleAddition={handleAddition}
                        handleDrag={handleDrag}
                        handleTagClick={handleTagClick}
-                       inputFieldPosition="top"
+                       inputFieldPosition="bottom"
                        autocomplete
                         />
                     <Components.Button onClick={handleButtonClick}>
