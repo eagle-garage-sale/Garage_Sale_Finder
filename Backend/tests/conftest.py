@@ -13,6 +13,11 @@ def new_user():
     user = Users(username="tikiman", email="tikiman@big.com", password="th1s1s@pain")
     return user
 
+@pytest.fixture(scope="module")
+def fake_jwt_cookie():
+    jwt = "_xsrf=2|8f94afa9|f33d112a4665e95638ea8dd7405c9ef4|1706063475"
+    return jwt
+
 
 
 #Starts the application for functional tests
