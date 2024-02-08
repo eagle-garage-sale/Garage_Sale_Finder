@@ -54,7 +54,7 @@ def create_app():
                                                     "open_time": fields.String(required=True, min_length=4, max_length=12),
                                                     "close_time": fields.String(required=True, min_length=4, max_length=12),
                                                     "description": fields.String(required=True, min_length=4, max_length=500),
-                                                    "keywords": fields.String(required=True, min_length=4, max_length=500)
+                                                    "tag": fields.String(required=True, min_length=4, max_length=500),
                                                     "token": fields.String(required=True, min_length=0, max_length=100000)
                                                     })
 
@@ -94,7 +94,7 @@ def create_app():
             _open_time = req_data.get("open_time")
             _close_time = req_data.get("close_time")
             _description = req_data.get("description")
-            _keywords = req_data.get("keywords")
+            _tag = req_data.get("tag")
             print(keys[2])
             locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
             coordinates = ObtainCoordinates(locationInfo)
@@ -117,7 +117,7 @@ def create_app():
                                     state = _state, city = _city, zip_code = _zip_code,
                                         user_id = _user_id, start_date = _start_date,
                                         end_date = _end_date, open_time = _open_time,
-                                            close_time = _close_time, description = _description, keywords = _keywords,
+                                            close_time = _close_time, description = _description, tag = _tag,
                                             latitude = coordinates[0], longitude = coordinates[1])
 
             # Perform insertion query to GarageSales table and finalize query.

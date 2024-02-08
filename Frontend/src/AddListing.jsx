@@ -63,8 +63,8 @@ function AddListing() {
     console.log('The tag at index ' + index + ' was clicked');
   };
     
-    const handleButtonClick = (e) => {
-        e.preventDefault();
+    const handleButtonClick = () => {
+
 
         setErrorMessage('');   
 
@@ -90,6 +90,7 @@ function AddListing() {
             open_time: openTime,
             close_time: closeTime,
             description: description,
+            tag: tags
         }
         fetch('http://127.0.0.1:5000/api/garagesales/register', {
             method: 'POST',
