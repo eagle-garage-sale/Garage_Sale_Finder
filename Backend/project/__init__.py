@@ -32,7 +32,7 @@ def create_app():
 
    
     #Now that the app has started, we can make our imports
-    from project.JWT import CreateJWT, decodeJWT
+    from project.JWT import CreateJWT, decodeJWT, extract_id
     from project.geocoding import ObtainCoordinates, ObtainGeoCodingApiData
     from project.garageSaleDAO import GarageSaleDAO
 
@@ -49,13 +49,13 @@ def create_app():
                                                         "state": fields.String(required=True, min_length=2, max_length=2),
                                                         "city": fields.String(required=True, min_length=1, max_length=100),
                                                         "zip_code": fields.String(required=True, min_length=5, max_length=10),
-                                                    "user_id": fields.Integer(required=True),
                                                     "start_date": fields.String(required=True, min_length=4, max_length=12),
                                                     "end_date": fields.String(required=True, min_length=4, max_length=12),
                                                     "open_time": fields.String(required=True, min_length=4, max_length=12),
                                                     "close_time": fields.String(required=True, min_length=4, max_length=12),
                                                     "description": fields.String(required=True, min_length=4, max_length=500),
                                                     "keywords": fields.String(required=True, min_length=4, max_length=500)
+                                                    "token": fields.String(required=True, min_length=0, max_length=100000)
                                                     })
 
     signup_model = api.model('SignUpModel', {"username": fields.String(required=True, min_length=2, max_length=32),
@@ -81,14 +81,14 @@ def create_app():
 
             # Get JSON string submitted by user
             req_data = request.get_json()
-
+            print(req_data)
 
             #Take values from specified JSON keys and get the user_id from jwt token
             _street_address = req_data.get("street_address")
             _state = req_data.get("state")
             _city = req_data.get("city")
+            _user_id = ""
             _zip_code = req_data.get("zip_code")
-            _user_id = req_data.get("user_id")
             _start_date = req_data.get("start_date")
             _end_date = req_data.get("end_date")
             _open_time = req_data.get("open_time")
@@ -98,6 +98,17 @@ def create_app():
             print(keys[2])
             locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
             coordinates = ObtainCoordinates(locationInfo)
+            token = req_data.get("token")
+
+            
+
+
+            if decodeJWT(token, keys[1]) is not False:
+                _user_id = extract_id(token, keys[1])
+            else:
+                return {"sucess": False,
+                        "msg": "Bad JWT token"}, 401
+
 
 
 
