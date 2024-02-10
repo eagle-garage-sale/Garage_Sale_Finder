@@ -1,5 +1,6 @@
 import React, { Component, useState} from "react";
 import * as Components from './Login_Components';
+import { redirect } from "react-router-dom"
 
 function Login_Main() {
   const [signIn, toggle] = useState(true);
@@ -28,6 +29,8 @@ function Login_Main() {
     .then(data => {
       if (data.success) {
         console.log('Login successful');
+        document.cookie = data.jwt;
+        redirect("/Home");
       } else {
         console.error(data.msg);
       }
@@ -37,6 +40,7 @@ function Login_Main() {
     });
 
   };
+
 
   const handleSignUpClick = () => {
     console.log("Sign Up clicked");

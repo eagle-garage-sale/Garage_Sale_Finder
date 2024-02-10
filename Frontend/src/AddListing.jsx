@@ -84,13 +84,13 @@ function AddListing() {
             state: state,
             city: city,
             zip_code: zipcode,
-            user_id: 1,
             start_date: startDate,
             end_date: endDate,
             open_time: openTime,
             close_time: closeTime,
             description: description,
-            tag: tags
+            tag: tags,
+            token: document.cookie
         }
         fetch('http://127.0.0.1:5000/api/garagesales/register', {
             method: 'POST',
