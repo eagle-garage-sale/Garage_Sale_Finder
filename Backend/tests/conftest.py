@@ -14,8 +14,6 @@ def new_user():
     return user
 
 
-
-
 #Starts the application for functional tests
 @pytest.fixture(scope='module')
 def test_client():
