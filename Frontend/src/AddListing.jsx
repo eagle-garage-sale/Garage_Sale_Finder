@@ -79,6 +79,8 @@ function AddListing() {
      
         console.log("Button clicked");
 
+        const tagsString = tags.map(tag => tag.text).join(',');
+
         const garageData = {
             street_address: streetAddress,
             state: state,
@@ -89,7 +91,7 @@ function AddListing() {
             open_time: openTime,
             close_time: closeTime,
             description: description,
-            tag: tags,
+            tag: tagsString,
             token: document.cookie
         }
         fetch('http://127.0.0.1:5000/api/garagesales/register', {
