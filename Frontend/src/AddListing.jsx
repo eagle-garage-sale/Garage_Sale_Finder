@@ -6,6 +6,7 @@ import * as Components from './AddListing_Components';
 import { WithContext as ReactTags } from 'react-tag-input';
 import profanity from 'leo-profanity';
 
+
 function getDate() {
     const today = new Date();
     const month = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -25,6 +26,7 @@ function AddListing() {
     const [closeTime, setCloseTime] = useState('');
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState([]);
+    const [file, setFile] = useState();
     const [errors, setErrors] = useState({});
 
     const navigate = useNavigate();
@@ -157,12 +159,13 @@ function AddListing() {
                 close_time: closeTime,
                 description: description,
                 tag: tagsString,
-                token: document.cookie
+                token: document.cookie,
+                image: file
             }
             fetch('http://127.0.0.1:5000/api/garagesales/register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data',
                 },
                 body: JSON.stringify(garageData)
             })
@@ -183,6 +186,11 @@ function AddListing() {
 
         setErrors(errors);
     };
+
+    function handleChange(event) {
+        setFile(event.target.files[0])
+        console.log(event.target.files[0])
+    }
 
     return (
         <div className="form-text">
@@ -247,9 +255,11 @@ function AddListing() {
                        inputFieldPosition="bottom"
                        autocomplete
                         />
+                    <input type="file" onChange={handleChange}/>
                     <Components.Button onClick={handleButtonClick}>
                     Add Listing
                     </Components.Button>
+                    
                 </Components.Form>
             </Components.Container>
             

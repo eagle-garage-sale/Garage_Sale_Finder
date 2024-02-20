@@ -17,6 +17,7 @@ def create_app():
     #found in config.py.
     config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
     app.config.from_object(config_type)
+    app.config['UPLOAD_FOLDER'] = 'UserFolders/'
 
     #Save all our neccessary keys to an array.
     keys = ExtractKeys('keys.txt')
@@ -99,8 +100,9 @@ def create_app():
             locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
             coordinates = ObtainCoordinates(locationInfo)
             token = req_data.get("token")
+            file = req_data.get("image")
 
-            
+            print(file)
 
 
             if decodeJWT(token, keys[1]) is not False:
@@ -160,11 +162,14 @@ def create_app():
             # Otherwise, proceed with database insert query. 
             # Make an object that can be inserted into the Users table
             new_user = Users(username=_username, email=_email, password=_password)
+            
 
             # Perform insertion query
             db.session.add(new_user)
             db.session.commit()
 
+            user_folder = os.path.join(app.config['UPLOAD_FOLDER'], _email.split("@")[0])
+            os.mkdir(user_folder)
             # Return success message with HTTP 200 code.
             return {"success": True,
                     "userID": new_user.id,
