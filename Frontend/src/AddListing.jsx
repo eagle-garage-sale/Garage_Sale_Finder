@@ -181,7 +181,7 @@ function AddListing() {
             .catch(error => {
                 console.error(error);
             });
-            navigate('/');
+            navigate('/home');
         }
 
         setErrors(errors);

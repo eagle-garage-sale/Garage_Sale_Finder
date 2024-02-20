@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginButton from './LoginButton';
+import LogoffButton from './LogoffButton';
 import AddListingButton from './AddListingButton';
 import './Navbar.css';
 
@@ -9,7 +9,7 @@ export default function Navbar() {
             <div className='title'>
                 <h1>Garage Sale Finder</h1>
             </div>
-            <LoginButton/>
+            <LogoffButton />
             <AddListingButton/>
         </nav>
     );

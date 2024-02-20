@@ -168,8 +168,11 @@ def create_app():
             db.session.add(new_user)
             db.session.commit()
 
+
+            #Add a folder for the users uploaded images
             user_folder = os.path.join(app.config['UPLOAD_FOLDER'], _email.split("@")[0])
             os.mkdir(user_folder)
+            
             # Return success message with HTTP 200 code.
             return {"success": True,
                     "userID": new_user.id,
