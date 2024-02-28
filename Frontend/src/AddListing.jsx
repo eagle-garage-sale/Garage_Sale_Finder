@@ -5,6 +5,8 @@ import './tagstyle.css';
 import * as Components from './AddListing_Components';
 import { WithContext as ReactTags } from 'react-tag-input';
 import profanity from 'leo-profanity';
+import axios from "axios";
+import * as FormData from "form-data";
 
 
 function getDate() {
@@ -26,10 +28,16 @@ function AddListing() {
     const [closeTime, setCloseTime] = useState('');
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState([]);
-    const [file, setFile] = useState();
     const [errors, setErrors] = useState({});
 
+    //File states
+    const [file, setFile] = useState(null);
+    const [ progress, setProgress ] = useState({ started: false, pc: 0 });
+    const [ msg, setMsg ] = useState(null);
+
+
     const navigate = useNavigate();
+
 
     const states = [ 'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
                      'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
@@ -104,6 +112,8 @@ function AddListing() {
         return errors;
     }
 
+
+
     const handleDelete = (i) => {
         setTags(tags.filter((tag, index) => index !== i));
     };
@@ -128,9 +138,11 @@ function AddListing() {
     const handleTagClick = (index) => {
         console.log('The tag at index ' + index + ' was clicked');
     };
-    
+
+
     const handleButtonClick = (event) => {
         event.preventDefault();
+        
         const errors = validateValues({
             streetAddress,
             state,
@@ -160,12 +172,14 @@ function AddListing() {
                 description: description,
                 tag: tagsString,
                 token: document.cookie,
-                image: file
             }
+            
+
+
             fetch('http://127.0.0.1:5000/api/garagesales/register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(garageData)
             })
@@ -187,10 +201,40 @@ function AddListing() {
         setErrors(errors);
     };
 
-    function handleChange(event) {
-        setFile(event.target.files[0])
-        console.log(event.target.files[0])
+    function handleUpload(e) {
+        e.preventDefault();
+        if (!file) {
+            setMsg("No file selected");
+            return;
+        }
+
+        const fd = new FormData();
+        fd.append('file', file);
+
+        setMsg("Uploading...");
+        setProgress(prevState => {
+            return {...prevState, started: true}
+        })
+        axios.post('http://127.0.0.1:5000/garagesales/addImage', fd, {
+            onUploadProgress: (progressEvent) => { setProgress(prevState => {
+                return {...prevState, pc: progressEvent.progress*100}
+            })},
+            headers: {
+
+            }          
+        })
+        .then(res => {
+            setMsg("Upload successful");
+            console.log(res.data)
+        })
+        .catch(err => {
+            setMsg("Upload failed");
+            console.error(err)
+        });
+
+
     }
+    
 
     return (
         <div className="form-text">
@@ -198,9 +242,11 @@ function AddListing() {
             <Components.header>Add Garage Sale Listing</Components.header>
 
             <Components.CenteredWrapper>
-
+        
             <Components.Container>
                 <Components.Form>
+
+                    {/*
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
                     {errors.streetAddress && <div style={{ color: 'red', marginTop: '1px' }}>{errors.streetAddress}</div>}
@@ -255,10 +301,15 @@ function AddListing() {
                        inputFieldPosition="bottom"
                        autocomplete
                         />
-                    <input type="file" onChange={handleChange}/>
-                    <Components.Button onClick={handleButtonClick}>
+
+                        */}
+                    <input onChange={ (e) => { setFile(e.target.files[0]) }} type="file"/>
+                    <Components.Button
+                    onClick = {handleUpload}>
                     Add Listing
                     </Components.Button>
+                    { progress.started && <progress max="100" value={progress.pc}></progress>}
+                    { msg && <span>{msg}</span>}
                     
                 </Components.Form>
             </Components.Container>
@@ -266,7 +317,7 @@ function AddListing() {
             
             </Components.CenteredWrapper>
         </div>
-    )
+    );
 }
 
 export default AddListing;
