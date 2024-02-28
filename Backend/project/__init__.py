@@ -1,9 +1,10 @@
 import os
 import sqlalchemy as sa
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api, fields, Resource
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
 
 db = SQLAlchemy()
 
@@ -18,6 +19,13 @@ def create_app():
     config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
     app.config.from_object(config_type)
     app.config['UPLOAD_FOLDER'] = 'UserFolders/'
+    ALLOWED_EXTENSIONS = set(['jpg', 'png'])
+
+        
+    def allowedFile(filename):
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
     #Save all our neccessary keys to an array.
     keys = ExtractKeys('keys.txt')
@@ -45,7 +53,8 @@ def create_app():
     # names of these values in order for this to work.
     api = Api(app)
     CORS(app)
-    
+
+   
     garagesale_model = api.model('GarageSaleModel', {"street_address": fields.String(required=True, min_length=5, max_length=100),
                                                         "state": fields.String(required=True, min_length=2, max_length=2),
                                                         "city": fields.String(required=True, min_length=1, max_length=100),
@@ -67,11 +76,28 @@ def create_app():
     login_model = api.model('LoginModel', {"email": fields.String(required=True,min_length=4, max_length=64), 
                                             "password": fields.String(required=True, min_length=4, max_legnth=16)})
     
+  
 
 
     @app.route('/')
     def hello():
         return {"msg": "HELLO!"}, 200
+    
+    @app.route('/garagesales/addImage', methods=['POST', 'GET'])
+    def fileUpload():
+        if request.method == 'POST':
+            file = request.files.getlist('file')
+            print(file)
+            for f in file:
+                print(f)
+                filename = secure_filename(f.filename)
+                if allowedFile(filename):
+                    f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                else:
+                    return jsonify({'message': 'File type not allowed'}), 400
+            return jsonify({"name": filename, "status": "success"})
+        else:
+            return jsonify({"status": "failed"})
 
     # Add garage sale entry
     @api.route('/api/garagesales/register', endpoint = 'garagesale_register')
@@ -100,9 +126,6 @@ def create_app():
             locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
             coordinates = ObtainCoordinates(locationInfo)
             token = req_data.get("token")
-            file = req_data.get("image")
-
-            print(file)
 
 
             if decodeJWT(token, keys[1]) is not False:
@@ -223,11 +246,4 @@ def initialize_extensions(app):
     with app.app_context():
         db.drop_all()
         db.create_all()
-
-    
-
-
-
-
-
 
