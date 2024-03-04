@@ -65,7 +65,7 @@ def create_app():
 
     login_model = api.model('LoginModel', {"email": fields.String(required=True,min_length=4, max_length=64), 
                                             "password": fields.String(required=True, min_length=4, max_legnth=16)})
-    userId_model = api.model('UserIDModel', {"userid": fields.String(required=True,min_length=1, max_length=64)})
+    userId_model = api.model('UserIDModel', {"token": fields.String(required=True,min_length=1, max_length=100000)})
     
 
 
@@ -215,7 +215,7 @@ def create_app():
             print(req_data)
             _user_id = ""
             token = req_data.get("token")
-
+   
             if decodeJWT(token, keys[1]) is not False:
                 _user_id = extract_id(token, keys[1])
             else:

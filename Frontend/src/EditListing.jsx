@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react";
+import React, {Component, useState, useEffect } from "react";
 import * as Components from './AddListing_Components';
 import { WithContext as ReactTags } from 'react-tag-input';
 import { KEYWORDS } from './keywords';
@@ -18,8 +18,11 @@ export function EditListingError() {
 }
 
 
-export function EditListing() {
-    GetListingsByIdJSON(document.cookie);
+export function EditListing() {                                 
+
+    //fetch data listing and update state variables
+    const listingData = GetListingsByIdJSON(document.cookie);
+    
     const [streetAddress, setStreetAddress] = useState('');
     const [state, setState] = useState('');
     const [city, setCity] = useState('');
@@ -32,6 +35,25 @@ export function EditListing() {
     const [tags, setTags] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
+    useEffect(() => {
+        const userData = GetListingsByIdJSON(document.cookie);
+        //if there is userdata, populate the form.
+        if (userData) {
+            if (userData) {
+                setStreetAddress(userData.streetAddress || '');
+                setState(userData.state || '');
+                setCity(userData.city || '');
+                setZipcode(userData.zipcode || '');
+                setStartDate(userData.startDate || '');
+                setEndDate(userData.endDate || '');
+                setOpenTime(userData.openTime || '');
+                setCloseTime(userData.closeTime || '');
+                setDescription(userData.description || '');
+                setTags(userData.tags || []);
+              }
+        }
+    })
+    
     const states = [ 'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
                      'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
                      'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH',
