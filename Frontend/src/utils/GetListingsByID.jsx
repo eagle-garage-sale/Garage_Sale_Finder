@@ -1,5 +1,6 @@
 
-export default function GetListingByIdJSON() {
+import buildListing from './buildListing';
+export default function GetListingsByIdJSON() {
     let ListingJSON;
 
     const token = { token: document.cookie}
@@ -26,10 +27,12 @@ export default function GetListingByIdJSON() {
         if (data.success) {
           //console.log('Loading successful');
           //window.location.reload();
-          ListingJSON = data.sales
+          /*ListingJSON = data.sales
           sessionStorage.setItem("usersales", ListingJSON);
           console.log(token);
-          
+          */
+         buildListing(data.sales);
+         console.log(token);
 
         } else {
           console.error(data.msg);
