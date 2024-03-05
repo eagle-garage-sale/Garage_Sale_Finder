@@ -41,7 +41,7 @@ def create_app():
 
    
     #Now that the app has started, we can make our imports
-    from project.JWT import CreateJWT, decodeJWT, extract_id
+    from project.JWT import CreateJWT, decodeJWT, extract_id, extract_email
     from project.geocoding import ObtainCoordinates, ObtainGeoCodingApiData
     from project.garageSaleDAO import GarageSaleDAO
 
@@ -85,6 +85,7 @@ def create_app():
     
     @app.route('/garagesales/addImage', methods=['POST', 'GET'])
     def fileUpload():
+        user_folder = os.path.join(app.config['UPLOAD_FOLDER'])
         if request.method == 'POST':
             file = request.files.getlist('file')
             for f in file:
@@ -113,6 +114,7 @@ def create_app():
             _state = req_data.get("state")
             _city = req_data.get("city")
             _user_id = ""
+            _user_email = ""
             _zip_code = req_data.get("zip_code")
             _start_date = req_data.get("start_date")
             _end_date = req_data.get("end_date")
@@ -128,6 +130,7 @@ def create_app():
 
             if decodeJWT(token, keys[1]) is not False:
                 _user_id = extract_id(token, keys[1])
+                _user_email = extract_email(token, keys[1])
             else:
                 return {"sucess": False,
                         "msg": "Bad JWT token"}, 401
@@ -146,6 +149,8 @@ def create_app():
             # Perform insertion query to GarageSales table and finalize query.
             db.session.add(new_sale)
             db.session.commit()
+
+            # Add images
 
             # Return HTTP code 200 (success) upon completion. 
             return {"success": True,
@@ -242,6 +247,8 @@ def create_app():
 def initialize_extensions(app):
     db.init_app(app)
     with app.app_context():
+
+
         db.drop_all()
         db.create_all()
 

@@ -202,6 +202,7 @@ function AddListing() {
     };
 
     function handleUpload(e) {
+
         e.preventDefault();
         if (!files) {
             setMsg("No file selected");
@@ -211,7 +212,6 @@ function AddListing() {
         const fd = new FormData();
         for (let i = 0; i<files.length; i++) {
             fd.append("file", files[i]);
-            
         }
 
         setMsg("Uploading...");
@@ -219,6 +219,7 @@ function AddListing() {
             return {...prevState, started: true}
         })
         axios.post('http://127.0.0.1:5000/garagesales/addImage', fd, {
+
             onUploadProgress: (progressEvent) => { setProgress(prevState => {
                 return {...prevState, pc: progressEvent.progress*100}
             })},
