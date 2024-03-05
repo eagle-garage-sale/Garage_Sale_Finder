@@ -5,6 +5,7 @@ import { KEYWORDS } from './keywords';
 import './tagstyle.css';
 import { Link } from "react-router-dom";
 import GetListingsByIdJSON from './utils/GetListingsByID';
+import buildListingObject from './utils/BuildUserListingObject';
 
 
 
@@ -18,9 +19,7 @@ export function EditListingError() {
 }
 
 
-export function EditListing() {                                 
-    console.log("COOKIE VALUE: ", document.cookie);
-    console.log("TEST VALUE: ", GetListingsByIdJSON(document.cookie));
+export function EditListing() { 
     const [streetAddress, setStreetAddress] = useState('');
     const [state, setState] = useState('');
     const [city, setCity] = useState('');
@@ -36,19 +35,22 @@ export function EditListing() {
     
     //fetch data listing and update state variables
     useEffect(() => {
-        const userData = GetListingsByIdJSON(document.cookie);
+        GetListingsByIdJSON();
+        const sale = buildListingObject();
+        console.log(typeof sale[0])
         //if there is userdata, populate the form.
-        if (userData) {
-            setStreetAddress(userData.streetAddress || '');
-            setState(userData.state || '');
-            setCity(userData.city || '');
-            setZipcode(userData.zipcode || '');
-            setStartDate(userData.startDate || '');
-            setEndDate(userData.endDate || '');
-            setOpenTime(userData.openTime || '');
-            setCloseTime(userData.closeTime || '');
-            setDescription(userData.description || '');
-            setTags(userData.tags || []);
+        if (sale) {
+        
+            setStreetAddress(sale.streetAddress || '');
+            setState(sale.state || '');
+            setCity(sale.city || '');
+            setZipcode(sale.zipcode || '');
+            setStartDate(sale.startDate || '');
+            setEndDate(sale.endDate || '');
+            setOpenTime(sale.openTime || '');
+            setCloseTime(sale.closeTime || '');
+            setDescription(sale.description || '');
+            setTags(sale.tags || []);
         }
     }, []);
     

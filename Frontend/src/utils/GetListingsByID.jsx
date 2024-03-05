@@ -1,5 +1,3 @@
-
-import buildListing from './buildListing';
 export default function GetListingsByIdJSON() {
     let ListingJSON;
 
@@ -31,7 +29,9 @@ export default function GetListingsByIdJSON() {
           sessionStorage.setItem("usersales", ListingJSON);
           console.log(token);
           */
-         buildListing(data.sales);
+        console.log(data.sales)
+        ListingJSON = data.sales
+        sessionStorage.setItem("usersales", ListingJSON);
          console.log(token);
 
         } else {
