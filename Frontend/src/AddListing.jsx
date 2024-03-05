@@ -31,7 +31,7 @@ function AddListing() {
     const [errors, setErrors] = useState({});
 
     //File states
-    const [file, setFile] = useState(null);
+    const [files, setFiles] = useState(null);
     const [ progress, setProgress ] = useState({ started: false, pc: 0 });
     const [ msg, setMsg ] = useState(null);
 
@@ -203,13 +203,16 @@ function AddListing() {
 
     function handleUpload(e) {
         e.preventDefault();
-        if (!file) {
+        if (!files) {
             setMsg("No file selected");
             return;
         }
 
         const fd = new FormData();
-        fd.append('file', file);
+        for (let i = 0; i<files.length; i++) {
+            fd.append("file", files[i]);
+            
+        }
 
         setMsg("Uploading...");
         setProgress(prevState => {
@@ -303,7 +306,7 @@ function AddListing() {
                         />
 
                         */}
-                    <input onChange={ (e) => { setFile(e.target.files[0]) }} type="file"/>
+                    <input onChange={ (e) => { setFiles(e.target.files) }} type="file" multiple/>
                     <Components.Button
                     onClick = {handleUpload}>
                     Add Listing

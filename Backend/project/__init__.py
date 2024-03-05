@@ -87,9 +87,7 @@ def create_app():
     def fileUpload():
         if request.method == 'POST':
             file = request.files.getlist('file')
-            print(file)
             for f in file:
-                print(f)
                 filename = secure_filename(f.filename)
                 if allowedFile(filename):
                     f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
