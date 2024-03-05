@@ -138,7 +138,7 @@ export function EditListing() {
             tag: tagsString,
             token: document.cookie
         }
-        fetch('http://127.0.0.1:5000/api/garagesales/$eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImV0aGFucndpbGxpbmdlckBnbWFpbC5jb20iLCJwYXNzd29yZCI6ImFzZGYifQ.z7WC62VDa8jbNLEqiUg7oAlRVWjMDDQyPvksxmgIgXs', {
+        fetch('http://127.0.0.1:5000/api/garagesales/register', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
