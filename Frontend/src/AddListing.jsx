@@ -144,7 +144,7 @@ function AddListing() {
         if (Object.keys(errors).length == 0) {
             console.log("Button clicked");
 
-            const tagsString = tags.map(tag => tag.text).join(',');
+            const tagsString = tags.length > 0 ? tags.map(tag => tag.text).join(',') : "None";
 
             const garageData = {
                 street_address: streetAddress,
@@ -235,7 +235,7 @@ function AddListing() {
                     <Components.Title>Description</Components.Title>
                     <Components.DescriptionInput type='description' placeholder='500 Characters Max' value = {description} onChange={(e) => setDescription(e.target.value)}/>
                     {errors.description && <div style={{ color: 'red', marginTop: '1px' }}>{errors.description}</div>}
-                    <Components.Title>Keywords</Components.Title>
+                    <Components.Title>Keywords (Recommended)</Components.Title>
                     <ReactTags
                        tags={tags}
                        suggestions={suggestions}
