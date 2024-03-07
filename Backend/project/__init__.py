@@ -195,13 +195,25 @@ def create_app():
             else:
                 return {"success":False, "msg":"Invalid email or password"}, 401
             
+    
+    #deletes garage sale listing
+    @api.route('/api/garagesales/register', endpoint='garage_sale_delete')
+    class DelGarageSale(Resource):
+        def delete(self):
+            #db.drop_all()
+            GarageSales.query.delete()
+            db.session.commit()
+            return {'success': True, "msg":"Successfully deleted the garage sale list!"}, 200
+    
+
     @api.route('/api/home/sales', endpoint='sales')
     class PullSales(Resource):
         def post(self):
-            salesCollection = AccessGarageSales.GetGarageSales()
-            GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
-            print (GarageSaleJSON)
-            return {'success': True, "msg":"Successfully got garage sale list!", "sales": GarageSaleJSON}, 200
+                salesCollection = AccessGarageSales.GetGarageSales()
+                GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
+                print (GarageSaleJSON)
+                return {'success': True, "msg":"Successfully got garage sale list!", "sales": GarageSaleJSON}, 200
+
 
     #Get Garage Sale by User ID Route.
     @api.route('/api/home/usersales', endpoint='usersales')
@@ -232,8 +244,7 @@ def create_app():
 
     return app
 
-
-
+    
 def initialize_extensions(app):
     db.init_app(app)
     with app.app_context():

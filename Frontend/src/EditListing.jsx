@@ -108,8 +108,6 @@ export function EditListing() {
   };
     
     const handleButtonClick = () => {
-
-
         setErrorMessage('');   
 
         if (streetAddress.trim() === '') {
@@ -139,7 +137,7 @@ export function EditListing() {
             token: document.cookie
         }
         fetch('http://127.0.0.1:5000/api/garagesales/register', {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -158,6 +156,29 @@ export function EditListing() {
             console.error(error);
         });
     };
+
+
+    const DeleteButtonClick = () => {
+        fetch ('http://127.0.0.1:5000/api/garagesales/register', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Deletion Successful");
+            }
+            else {
+                console.error(data.msg);
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        })
+    };
+    
 
     return (
         <div className="form-text">
@@ -216,9 +237,22 @@ export function EditListing() {
                        inputFieldPosition="bottom"
                        autocomplete
                         />
-                    <Components.Button onClick={handleButtonClick}>
-                    Edit Listing
-                    </Components.Button>
+                     <div style={{ position: 'absolute', left: '18%', top: '90%',transform: 'translate(-50%, -50%)' }}>
+                        <Components.Button onClick={() => { DeleteButtonClick(); handleButtonClick(); }}>
+                            Edit Listing
+                     </Components.Button>
+                    </div>
+
+                    <div style={{ position: 'absolute', left: '58%', top: '90%',transform: 'translate(-50%, -50%)', whiteSpace: 'nowrap'}}>
+                        <Components.Button
+                        onClick={DeleteButtonClick}
+                        style={{
+                            backgroundColor: "#F75E5B",
+                            border: "1px solid #F75E5B"}}
+                        >
+                            Delete Listing
+                        </Components.Button>
+                    </div>
                 </Components.Form>
             </Components.Container>
             
