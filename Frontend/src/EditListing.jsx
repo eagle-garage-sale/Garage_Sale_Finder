@@ -19,7 +19,7 @@ export function EditListingError() {
 }
 
 
-export function EditListing() {                                 
+export function EditListing() { 
     const [streetAddress, setStreetAddress] = useState('');
     const [state, setState] = useState('');
     const [city, setCity] = useState('');
@@ -32,33 +32,25 @@ export function EditListing() {
     const [tags, setTags] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
+    
     //fetch data listing and update state variables
     useEffect(() => {
-        //parses and builds array of user's listing info
-        const unparsedUserData = GetListingsByIdJSON(document.cookie);
-        const userData = JSON.parse(unparsedUserData);
-        let collection = [];
-        for (const jsonStr of userData)
-        {
-            collection.push(JSON.parse(jsonStr));
-        }
-
-        console.log("Tested Parsed Dataed: ", collection);
-
-        console.log("Street address value: ", collection[0].street_address);
-
+        GetListingsByIdJSON();
+        const sale = buildListingObject();
+        console.log(typeof sale[0])
         //if there is userdata, populate the form.
-        if (userData) {
-            setStreetAddress(collection[0].street_address);
-            setState(collection[0].state);
-            setCity(collection[0].city);
-            setZipcode(collection[0].zip_code);
-            setStartDate(collection[0].start_date);
-            setEndDate(collection[0].end_date);
-            setOpenTime(collection[0].open_time);
-            setCloseTime(collection[0].close_time);
-            setDescription(collection[0].description);
-            //setTags(collection[0].tag);
+        if (sale) {
+        
+            setStreetAddress(sale.streetAddress || '');
+            setState(sale.state || '');
+            setCity(sale.city || '');
+            setZipcode(sale.zipcode || '');
+            setStartDate(sale.startDate || '');
+            setEndDate(sale.endDate || '');
+            setOpenTime(sale.openTime || '');
+            setCloseTime(sale.closeTime || '');
+            setDescription(sale.description || '');
+            setTags(sale.tags || []);
         }
     }, []);
     
@@ -140,7 +132,7 @@ export function EditListing() {
             token: document.cookie
         }
         fetch('http://127.0.0.1:5000/api/garagesales/register', {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -149,7 +141,7 @@ export function EditListing() {
         .then(response => response.json())
         .then(data => {
             if(data.success) {
-                console.log('Update successful');
+                console.log('Registration successful');
                 window.location.reload();
             } else {
                 console.error(data.msg);
