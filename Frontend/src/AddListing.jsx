@@ -173,9 +173,41 @@ function AddListing() {
                 tag: tagsString,
                 token: document.cookie,
             }
-            
 
-
+            if (!files) {
+                setMsg("No file selected");
+                return;
+            }
+    
+            const fd = new FormData();
+            for (let i = 0; i<files.length; i++) {
+                fd.append("file", files[i]);
+            }
+    
+            fd.append("username", sessionStorage.getItem("username"));
+    
+            setMsg("Uploading...");
+            setProgress(prevState => {
+                return {...prevState, started: true}
+            })
+            axios.post('http://127.0.0.1:5000/garagesales/addImage', fd, {
+    
+                onUploadProgress: (progressEvent) => { setProgress(prevState => {
+                    return {...prevState, pc: progressEvent.progress*100}
+                })},
+                headers: {
+    
+                }          
+            })
+            .then(res => {
+                setMsg("Upload successful");
+                console.log(res.data)
+            })
+            .catch(err => {
+                setMsg("Upload failed");
+                console.error(err)
+            });
+    
             fetch('http://127.0.0.1:5000/api/garagesales/register', {
                 method: 'POST',
                 headers: {
@@ -188,6 +220,7 @@ function AddListing() {
                 if(data.success) {
                     console.log('Registration successful');
                     window.location.reload();
+
                 } else {
                     console.error(data.msg);
                 }
@@ -196,49 +229,12 @@ function AddListing() {
                 console.error(error);
             });
             navigate('/home');
+
         }
 
         setErrors(errors);
     };
 
-    function handleUpload(e) {
-
-        e.preventDefault();
-        if (!files) {
-            setMsg("No file selected");
-            return;
-        }
-
-        const fd = new FormData();
-        for (let i = 0; i<files.length; i++) {
-            fd.append("file", files[i]);
-        }
-
-        setMsg("Uploading...");
-        setProgress(prevState => {
-            return {...prevState, started: true}
-        })
-        axios.post('http://127.0.0.1:5000/garagesales/addImage', fd, {
-
-            onUploadProgress: (progressEvent) => { setProgress(prevState => {
-                return {...prevState, pc: progressEvent.progress*100}
-            })},
-            headers: {
-
-            }          
-        })
-        .then(res => {
-            setMsg("Upload successful");
-            console.log(res.data)
-        })
-        .catch(err => {
-            setMsg("Upload failed");
-            console.error(err)
-        });
-
-
-    }
-    
 
     return (
         <div className="form-text">
@@ -250,7 +246,6 @@ function AddListing() {
             <Components.Container>
                 <Components.Form>
 
-                    {/*
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
                     {errors.streetAddress && <div style={{ color: 'red', marginTop: '1px' }}>{errors.streetAddress}</div>}
@@ -306,10 +301,9 @@ function AddListing() {
                        autocomplete
                         />
 
-                        */}
                     <input onChange={ (e) => { setFiles(e.target.files) }} type="file" multiple/>
                     <Components.Button
-                    onClick = {handleUpload}>
+                    onClick = {handleButtonClick}>
                     Add Listing
                     </Components.Button>
                     { progress.started && <progress max="100" value={progress.pc}></progress>}

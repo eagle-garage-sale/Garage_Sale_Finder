@@ -7,6 +7,7 @@ import './LogoffButton_Styles.css';
 export default function LogoffButton() {
     const deleteCookie =() => {
         document.cookie = "";
+        sessionStorage.removeItem("username");
     }
 
     return (

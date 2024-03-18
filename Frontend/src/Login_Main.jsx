@@ -33,6 +33,7 @@ function Login_Main() {
       if (data.success) {
         console.log('Login successful');
         document.cookie = data.jwt;
+        sessionStorage.setItem("username", data.username)
         
       } else {
         console.error(data.msg);

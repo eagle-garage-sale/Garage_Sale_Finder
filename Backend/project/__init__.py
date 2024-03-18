@@ -85,13 +85,16 @@ def create_app():
     
     @app.route('/garagesales/addImage', methods=['POST', 'GET'])
     def fileUpload():
-        user_folder = os.path.join(app.config['UPLOAD_FOLDER'])
+
+        username = request.form.get("username")
+        
+        user_folder = os.path.join(app.config['UPLOAD_FOLDER'], username)
         if request.method == 'POST':
             file = request.files.getlist('file')
             for f in file:
                 filename = secure_filename(f.filename)
                 if allowedFile(filename):
-                    f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    f.save(os.path.join(user_folder, filename))
                 else:
                     return jsonify({'message': 'File type not allowed'}), 400
             return jsonify({"name": filename, "status": "success"})
@@ -122,6 +125,7 @@ def create_app():
             _close_time = req_data.get("close_time")
             _description = req_data.get("description")
             _tag = req_data.get("tag")
+            
             print(keys[2])
             locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
             coordinates = ObtainCoordinates(locationInfo)
@@ -130,7 +134,6 @@ def create_app():
 
             if decodeJWT(token, keys[1]) is not False:
                 _user_id = extract_id(token, keys[1])
-                _user_email = extract_email(token, keys[1])
             else:
                 return {"sucess": False,
                         "msg": "Bad JWT token"}, 401
@@ -224,7 +227,7 @@ def create_app():
 
                 #Create JWT token and send back to the user. They will need this for future transactions with the website.
                 token = CreateJWT(user.id, _email, _password, keys[1])
-                return {'success':True,  "msg":"login successful!", "jwt": token}, 200
+                return {'success':True,  "msg":"login successful!", "jwt": token, "username": _email.split("@")[0]}, 200
             else:
                 return {"success":False, "msg":"Invalid email or password"}, 401
             
