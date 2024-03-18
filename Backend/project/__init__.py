@@ -65,6 +65,7 @@ def create_app():
 
     login_model = api.model('LoginModel', {"email": fields.String(required=True,min_length=4, max_length=64), 
                                             "password": fields.String(required=True, min_length=4, max_legnth=16)})
+    userId_model = api.model('UserIDModel', {"token": fields.String(required=True,min_length=1, max_length=100000)})
     
 
 
@@ -194,22 +195,56 @@ def create_app():
             else:
                 return {"success":False, "msg":"Invalid email or password"}, 401
             
+    
+    #deletes garage sale listing
+    @api.route('/api/garagesales/register', endpoint='garage_sale_delete')
+    class DelGarageSale(Resource):
+        def delete(self):
+            #db.drop_all()
+            GarageSales.query.delete()
+            db.session.commit()
+            return {'success': True, "msg":"Successfully deleted the garage sale list!"}, 200
+    
+
     @api.route('/api/home/sales', endpoint='sales')
     class PullSales(Resource):
         def post(self):
-            salesCollection = AccessGarageSales.GetGarageSales()
+                salesCollection = AccessGarageSales.GetGarageSales()
+                GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
+                print (GarageSaleJSON)
+                return {'success': True, "msg":"Successfully got garage sale list!", "sales": GarageSaleJSON}, 200
+
+
+    #Get Garage Sale by User ID Route.
+    @api.route('/api/home/usersales', endpoint='usersales')
+    
+    class UserSales(Resource):
+        @api.expect(userId_model, validate=True)
+        def post(self):
+
+            #Extract userId from request
+            req_data = request.get_json()
+            print(req_data)
+            _user_id = ""
+            token = req_data.get("token")
+   
+            if decodeJWT(token, keys[1]) is not False:
+                _user_id = extract_id(token, keys[1])
+            else:
+                return {"sucess": False,
+                        "msg": "Bad JWT token"}, 401
+
+            salesCollection = AccessGarageSales.GetGarageSalesByUserId(_user_id)
             GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
             print (GarageSaleJSON)
-            return {'success': True, "msg":"Successfully got garage sale list!", "sales": GarageSaleJSON}, 200
-
+            return {'success': True, "msg":"Successfully got garage sale list by user ID!", "sales": GarageSaleJSON}, 200
     #1. Get Sales from database and put into array
     #2. Convert array to json
     #3. Create an api route
 
     return app
 
-
-
+    
 def initialize_extensions(app):
     db.init_app(app)
     with app.app_context():

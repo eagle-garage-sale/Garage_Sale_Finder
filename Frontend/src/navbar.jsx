@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginButton from './LoginButton';
 import AddListingButton from './AddListingButton';
+import EditListingButton from './EditListingButton';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -11,6 +12,7 @@ export default function Navbar() {
             </div>
             <LoginButton/>
             <AddListingButton/>
+            <EditListingButton/>
         </nav>
     );
 };
