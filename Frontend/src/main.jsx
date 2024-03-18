@@ -7,8 +7,10 @@ import LoginButton from './LogoffButton'
 import "./Login_styles.css";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AddListing from './AddListing';
+import { EditListing, EditListingError } from './EditListing';
 
 const root = document.getElementById('root');
+const hasCurrentListing = true;           //temp. Will use to determine if user has a listing to edit.
 
 //delete this later. It is used to render button on top of login component
 
@@ -24,7 +26,11 @@ ReactDOM.render(
     <Routes>
       <Route path="/" element={<Login_Main />} />
       <Route path="/form" element={<AddListing/>}/>
+
       <Route path="/home" element={<Home/>}  />
+      <Route path="/login" element={<Login_Main/>}  />
+      <Route path ="/editlisting" element = { hasCurrentListing ? ( <EditListing /> ) : ( <EditListingError />) } />
+
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
