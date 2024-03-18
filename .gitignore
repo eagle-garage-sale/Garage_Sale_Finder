@@ -36,7 +36,9 @@ dist-ssr
 *.sw?
 .UserFolders/*
 
-# database and text files
+# database and text, and image files
 ######################
 *.txt
 *.db
+*.png
+*.jpg
