@@ -1,6 +1,7 @@
 import React, { Component, useState} from "react";
 import * as Components from './Login_Components';
-import { redirect } from "react-router-dom"
+import {useNavigate } from "react-router-dom"
+
 
 function Login_Main() {
   const [signIn, toggle] = useState(true);
@@ -10,6 +11,8 @@ function Login_Main() {
 
   const [name, setName] = useState ('');
   const [email, setEmail] = useState ('');
+
+  const navigate = useNavigate();
 
   const handleSignInClick = () => {
     console.log("Sign In clicked");
@@ -30,7 +33,8 @@ function Login_Main() {
       if (data.success) {
         console.log('Login successful');
         document.cookie = data.jwt;
-        redirect("/Home");
+        sessionStorage.setItem("username", data.username)
+        
       } else {
         console.error(data.msg);
       }
@@ -38,6 +42,7 @@ function Login_Main() {
     .catch(error => {
       console.error(error);
     });
+    navigate('/home');
 
   };
 

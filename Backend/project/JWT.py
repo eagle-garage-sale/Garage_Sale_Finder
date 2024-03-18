@@ -54,3 +54,7 @@ def decodeJWT(JWT,secretKey):
 def extract_id(token, secretKey):
    data = decodeJWT(token, secretKey)
    return data["user_id"]
+
+def extract_email(token, secretKey):
+    data = decodeJWT(token, secretKey)
+    return data["email"]

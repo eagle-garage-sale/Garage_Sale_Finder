@@ -2,7 +2,7 @@ import React from 'react';
 import './Home_Styles.css';
 import Maps from './Maps';
 import Navbar from './Navbar'
-import LoginButton from './LoginButton';
+import LoginButton from './LogoffButton';
 import AddListingButton from './AddListingButton';
 import * as Components from './Home_Components';
 import listing from './Listing_Component';

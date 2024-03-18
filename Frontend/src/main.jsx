@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Login_Main from './Login_Main';
 import Maps from './Maps';
 import Home from './Home';
-import LoginButton from './LoginButton'
+import LoginButton from './LogoffButton'
 import "./Login_styles.css";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AddListing from './AddListing';
@@ -24,10 +24,13 @@ const hasCurrentListing = true;           //temp. Will use to determine if user 
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Login_Main />} />
       <Route path="/form" element={<AddListing/>}/>
+
+      <Route path="/home" element={<Home/>}  />
       <Route path="/login" element={<Login_Main/>}  />
       <Route path ="/editlisting" element = { hasCurrentListing ? ( <EditListing /> ) : ( <EditListingError />) } />
+
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')

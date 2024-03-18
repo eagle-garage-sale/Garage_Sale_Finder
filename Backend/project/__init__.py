@@ -1,9 +1,10 @@
 import os
 import sqlalchemy as sa
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api, fields, Resource
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
 
 db = SQLAlchemy()
 
@@ -17,6 +18,15 @@ def create_app():
     #found in config.py.
     config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
     app.config.from_object(config_type)
+    app.config['UPLOAD_FOLDER'] = 'UserFolders/'
+    ALLOWED_EXTENSIONS = set(['jpg', 'png'])
+    app.config["MAX_CONTENT_LENGTH"] = 1024 * 1024 * 10
+
+        
+    def allowedFile(filename):
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
     #Save all our neccessary keys to an array.
     keys = ExtractKeys('keys.txt')
@@ -32,7 +42,7 @@ def create_app():
 
    
     #Now that the app has started, we can make our imports
-    from project.JWT import CreateJWT, decodeJWT, extract_id
+    from project.JWT import CreateJWT, decodeJWT, extract_id, extract_email
     from project.geocoding import ObtainCoordinates, ObtainGeoCodingApiData
     from project.garageSaleDAO import GarageSaleDAO
 
@@ -44,7 +54,8 @@ def create_app():
     # names of these values in order for this to work.
     api = Api(app)
     CORS(app)
-    
+
+   
     garagesale_model = api.model('GarageSaleModel', {"street_address": fields.String(required=True, min_length=5, max_length=100),
                                                         "state": fields.String(required=True, min_length=2, max_length=2),
                                                         "city": fields.String(required=True, min_length=1, max_length=100),
@@ -67,11 +78,30 @@ def create_app():
                                             "password": fields.String(required=True, min_length=4, max_legnth=16)})
     userId_model = api.model('UserIDModel', {"token": fields.String(required=True,min_length=1, max_length=100000)})
     
+  
 
 
     @app.route('/')
     def hello():
         return {"msg": "HELLO!"}, 200
+    
+    @app.route('/garagesales/addImage', methods=['POST', 'GET'])
+    def fileUpload():
+
+        username = request.form.get("username")
+        
+        user_folder = os.path.join(app.config['UPLOAD_FOLDER'], username)
+        if request.method == 'POST':
+            file = request.files.getlist('file')
+            for f in file:
+                filename = secure_filename(f.filename)
+                if allowedFile(filename):
+                    f.save(os.path.join(user_folder, filename))
+                else:
+                    return jsonify({'message': 'File type not allowed'}), 400
+            return jsonify({"name": filename, "status": "success"})
+        else:
+            return jsonify({"status": "failed"})
 
     # Add garage sale entry
     @api.route('/api/garagesales/register', endpoint = 'garagesale_register')
@@ -89,6 +119,7 @@ def create_app():
             _state = req_data.get("state")
             _city = req_data.get("city")
             _user_id = ""
+            _user_email = ""
             _zip_code = req_data.get("zip_code")
             _start_date = req_data.get("start_date")
             _end_date = req_data.get("end_date")
@@ -96,12 +127,11 @@ def create_app():
             _close_time = req_data.get("close_time")
             _description = req_data.get("description")
             _tag = req_data.get("tag")
+            
             print(keys[2])
             locationInfo = ObtainGeoCodingApiData(_street_address, _city, _state, _zip_code, keys[2])
             coordinates = ObtainCoordinates(locationInfo)
             token = req_data.get("token")
-
-            
 
 
             if decodeJWT(token, keys[1]) is not False:
@@ -124,6 +154,8 @@ def create_app():
             # Perform insertion query to GarageSales table and finalize query.
             db.session.add(new_sale)
             db.session.commit()
+
+            # Add images
 
             # Return HTTP code 200 (success) upon completion. 
             return {"success": True,
@@ -161,11 +193,17 @@ def create_app():
             # Otherwise, proceed with database insert query. 
             # Make an object that can be inserted into the Users table
             new_user = Users(username=_username, email=_email, password=_password)
+            
 
             # Perform insertion query
             db.session.add(new_user)
             db.session.commit()
 
+
+            #Add a folder for the users uploaded images
+            user_folder = os.path.join(app.config['UPLOAD_FOLDER'], _email.split("@")[0])
+            os.mkdir(user_folder)
+            
             # Return success message with HTTP 200 code.
             return {"success": True,
                     "userID": new_user.id,
@@ -191,7 +229,7 @@ def create_app():
 
                 #Create JWT token and send back to the user. They will need this for future transactions with the website.
                 token = CreateJWT(user.id, _email, _password, keys[1])
-                return {'success':True,  "msg":"login successful!", "jwt": token}, 200
+                return {'success':True,  "msg":"login successful!", "jwt": token, "username": _email.split("@")[0]}, 200
             else:
                 return {"success":False, "msg":"Invalid email or password"}, 401
             
@@ -248,13 +286,8 @@ def create_app():
 def initialize_extensions(app):
     db.init_app(app)
     with app.app_context():
+
+
         db.drop_all()
         db.create_all()
-
-    
-
-
-
-
-
 
