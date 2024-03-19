@@ -34,6 +34,7 @@ function Login_Main() {
         console.log('Login successful');
         document.cookie = data.jwt;
         sessionStorage.setItem("username", data.username)
+        window.location.reload();
         
       } else {
         console.error(data.msg);
