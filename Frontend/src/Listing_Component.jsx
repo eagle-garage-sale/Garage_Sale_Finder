@@ -3,19 +3,42 @@ import * as Components from './Login_Components';
 
 export default function ShowListing(props)
 {
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString();
+      };
+
+    const formatTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+    // Convert hours to integer
+    const hour = parseInt(hours, 10);
+    // Determine AM/PM based on hour
+    const amOrPm = hour >= 12 ? 'PM' : 'AM';
+    // Convert hour from military time to standard time
+    const formattedHour = hour % 12 || 12;
+    // Format minutes with leading zero if needed
+    const formattedMinutes = minutes.padStart(2, '0');
+    // Construct formatted time string
+    return `${formattedHour}:${formattedMinutes} ${amOrPm}`;
+
+      };
+
     return (
         <div className='listing-details' key={props.id}>
             <h3>
-                 {props.description}
+                 {props.street_address}, {props.state}
             </h3>
             <p>
-                Address: {props.street_address}, {props.state}
+                {formatDate(props.start_date)} - {formatDate(props.end_date)}
             </p>
             <p>
-                Date: {props.start_date} -{props.end_date}
+                Hours: {formatTime(props.open_time)} - {formatTime(props.close_time)}
             </p>
             <p>
-                Open From: {props.open_time} - {props.close_time}
+                {props.description}
+            </p>
+            <p>
+                Tags: {props.tag}
             </p>
         </div>
     );
