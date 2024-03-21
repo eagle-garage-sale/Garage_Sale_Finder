@@ -5,6 +5,9 @@ import './tagstyle.css';
 import * as Components from './AddListing_Components';
 import { WithContext as ReactTags } from 'react-tag-input';
 import profanity from 'leo-profanity';
+import axios from "axios";
+import * as FormData from "form-data";
+
 
 function getDate() {
     const today = new Date();
@@ -27,7 +30,14 @@ function AddListing() {
     const [tags, setTags] = useState([]);
     const [errors, setErrors] = useState({});
 
+    //File states
+    const [files, setFiles] = useState(null);
+    const [ progress, setProgress ] = useState({ started: false, pc: 0 });
+    const [ msg, setMsg ] = useState(null);
+
+
     const navigate = useNavigate();
+
 
     const states = [ 'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
                      'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
@@ -102,6 +112,8 @@ function AddListing() {
         return errors;
     }
 
+
+
     const handleDelete = (i) => {
         setTags(tags.filter((tag, index) => index !== i));
     };
@@ -126,9 +138,11 @@ function AddListing() {
     const handleTagClick = (index) => {
         console.log('The tag at index ' + index + ' was clicked');
     };
-    
+
+
     const handleButtonClick = (event) => {
         event.preventDefault();
+        
         const errors = validateValues({
             streetAddress,
             state,
@@ -144,7 +158,7 @@ function AddListing() {
         if (Object.keys(errors).length == 0) {
             console.log("Button clicked");
 
-            const tagsString = tags.length > 0 ? tags.map(tag => tag.text).join(',') : "None";
+            const tagsString = tags.map(tag => tag.text).join(',');
 
             const garageData = {
                 street_address: streetAddress,
@@ -157,8 +171,43 @@ function AddListing() {
                 close_time: closeTime,
                 description: description,
                 tag: tagsString,
-                token: document.cookie
+                token: document.cookie,
             }
+
+            if (!files) {
+                setMsg("No file selected");
+                return;
+            }
+    
+            const fd = new FormData();
+            for (let i = 0; i<files.length; i++) {
+                fd.append("file", files[i]);
+            }
+    
+            fd.append("username", sessionStorage.getItem("username"));
+    
+            setMsg("Uploading...");
+            setProgress(prevState => {
+                return {...prevState, started: true}
+            })
+            axios.post('http://127.0.0.1:5000/garagesales/addImage', fd, {
+    
+                onUploadProgress: (progressEvent) => { setProgress(prevState => {
+                    return {...prevState, pc: progressEvent.progress*100}
+                })},
+                headers: {
+    
+                }          
+            })
+            .then(res => {
+                setMsg("Upload successful");
+                console.log(res.data)
+            })
+            .catch(err => {
+                setMsg("Upload failed");
+                console.error(err)
+            });
+    
             fetch('http://127.0.0.1:5000/api/garagesales/register', {
                 method: 'POST',
                 headers: {
@@ -171,6 +220,7 @@ function AddListing() {
                 if(data.success) {
                     console.log('Registration successful');
                     window.location.reload();
+
                 } else {
                     console.error(data.msg);
                 }
@@ -178,11 +228,13 @@ function AddListing() {
             .catch(error => {
                 console.error(error);
             });
-            navigate('/');
+            navigate('/home');
+
         }
 
         setErrors(errors);
     };
+
 
     return (
         <div className="form-text">
@@ -190,9 +242,10 @@ function AddListing() {
             <Components.header>Add Garage Sale Listing</Components.header>
 
             <Components.CenteredWrapper>
-
+        
             <Components.Container>
                 <Components.Form>
+
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
                     {errors.streetAddress && <div style={{ color: 'red', marginTop: '1px' }}>{errors.streetAddress}</div>}
@@ -235,7 +288,7 @@ function AddListing() {
                     <Components.Title>Description</Components.Title>
                     <Components.DescriptionInput type='description' placeholder='500 Characters Max' value = {description} onChange={(e) => setDescription(e.target.value)}/>
                     {errors.description && <div style={{ color: 'red', marginTop: '1px' }}>{errors.description}</div>}
-                    <Components.Title>Keywords (Recommended)</Components.Title>
+                    <Components.Title>Keywords</Components.Title>
                     <ReactTags
                        tags={tags}
                        suggestions={suggestions}
@@ -247,16 +300,22 @@ function AddListing() {
                        inputFieldPosition="bottom"
                        autocomplete
                         />
-                    <Components.Button onClick={handleButtonClick}>
+
+                    <input onChange={ (e) => { setFiles(e.target.files) }} type="file" multiple/>
+                    <Components.Button
+                    onClick = {handleButtonClick}>
                     Add Listing
                     </Components.Button>
+                    { progress.started && <progress max="100" value={progress.pc}></progress>}
+                    { msg && <span>{msg}</span>}
+                    
                 </Components.Form>
             </Components.Container>
             
             
             </Components.CenteredWrapper>
         </div>
-    )
+    );
 }
 
 export default AddListing;

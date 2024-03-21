@@ -78,7 +78,7 @@ def create_app():
                                             "password": fields.String(required=True, min_length=4, max_legnth=16)})
     userId_model = api.model('UserIDModel', {"token": fields.String(required=True,min_length=1, max_length=100000)})
     
-  
+    token_model = api.model("tokenModel", {"token": fields.String(required=True,min_length=1, max_length=100000)})
 
 
     @app.route('/')
@@ -103,7 +103,8 @@ def create_app():
         else:
             return jsonify({"status": "failed"})
 
-    # Add garage sale entry
+    # POST: Add garage sale entry
+    # DELETE: Delete garage sale from passed user id
     @api.route('/api/garagesales/register', endpoint = 'garagesale_register')
     class GarageSalesRegister(Resource):
 
@@ -140,9 +141,7 @@ def create_app():
                 return {"sucess": False,
                         "msg": "Bad JWT token"}, 401
 
-
-
-
+        
             # Make a new garage sale object from the values specified above
             new_sale = GarageSales(street_address = _street_address,
                                     state = _state, city = _city, zip_code = _zip_code,
@@ -161,9 +160,29 @@ def create_app():
             return {"success": True,
                     "garageSaleID": new_sale.id,
                     "msg": "The garage sale was successfully registered"}, 200
+        
 
+        @api.expect(token_model, validate=True)  
+        def delete(self):
+            req_data = request.get_json()
+            _user_id = ""
+            token = req_data.get("token")
 
+            if decodeJWT(token, keys[1]) is not False:
+                _user_id = extract_id(token, keys[1])
+            else:
+                return {"sucess": False,
+                        "msg": "Bad JWT token"}, 401
+            GarageSales.query.filter_by(user_id=_user_id).delete()
+            
+            print("other userID: ", _user_id)
+            db.session.commit()
+            
 
+            #db.drop_all()
+            #GarageSales.query.delete()
+            #db.session.commit()
+            return {'success': True, "msg":"Successfully deleted the garage sale list!"}, 200
 
 
     # Add new user
@@ -233,30 +252,7 @@ def create_app():
             else:
                 return {"success":False, "msg":"Invalid email or password"}, 401
             
-    
-    #deletes garage sale listing
-    @api.route('/api/garagesales/register', endpoint='garage_sale_delete')
-    class DelGarageSale(Resource):
-        def delete(self):
-            req_data = request.get_json()
-            _user_id = ""
-            token = req_data.get("token")
 
-            if decodeJWT(token, keys[1]) is not False:
-                _user_id = extract_id(token, keys[1])
-            else:
-                return {"sucess": False,
-                        "msg": "Bad JWT token"}, 401
-            GarageSales.query.filter_by(user_id=_user_id).delete()
-            
-            print("other userID: ", _user_id)
-            db.session.commit()
-            
-
-            #db.drop_all()
-            #GarageSales.query.delete()
-            #db.session.commit()
-            return {'success': True, "msg":"Successfully deleted the garage sale list!"}, 200
     
 
     @api.route('/api/home/sales', endpoint='sales')
