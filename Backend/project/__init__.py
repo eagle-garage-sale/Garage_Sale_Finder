@@ -238,9 +238,24 @@ def create_app():
     @api.route('/api/garagesales/register', endpoint='garage_sale_delete')
     class DelGarageSale(Resource):
         def delete(self):
-            #db.drop_all()
-            GarageSales.query.delete()
+            req_data = request.get_json()
+            _user_id = ""
+            token = req_data.get("token")
+
+            if decodeJWT(token, keys[1]) is not False:
+                _user_id = extract_id(token, keys[1])
+            else:
+                return {"sucess": False,
+                        "msg": "Bad JWT token"}, 401
+            GarageSales.query.filter_by(user_id=_user_id).delete()
+            
+            print("other userID: ", _user_id)
             db.session.commit()
+            
+
+            #db.drop_all()
+            #GarageSales.query.delete()
+            #db.session.commit()
             return {'success': True, "msg":"Successfully deleted the garage sale list!"}, 200
     
 

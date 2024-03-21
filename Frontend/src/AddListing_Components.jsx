@@ -45,7 +45,6 @@ border-radius: 10px;
 box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 position: relative;
 overflow: hidden;
-height: 80vh; 
 width: 700px;
 max-width: 100%;
 min-height: 850px;
@@ -114,7 +113,7 @@ background-color: #eee;
 border: none;
 padding: 12px 15px;
 margin: 8px 0;
-width: 12%;
+width: 14%;
 `;
 
 export const CityInput = styled.input`

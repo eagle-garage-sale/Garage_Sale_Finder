@@ -37,15 +37,11 @@ export default function Home() {
 
         <ul className='listing'>
           <li className='listing-item'>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJWX3CaS8jyYQkZmROfA-iwgDza17vjT4vlBJP6WshmCJ_kRx2793s4epRhkAmPwGkbtw&usqp=CAU" alt="Restaurant" />
             <div className='listing-details'>
-              <h3>1. Garage Sale Name</h3>
-              <p>Category: Antiques</p>
-              <p>Address: 123 Main St, City</p>
+            {listings}
             </div>
           </li>
         </ul>
-              {listings}
       </div>  
       <div className='right-column'>
         <Maps />
