@@ -159,11 +159,17 @@ export function EditListing() {
 
 
     const DeleteButtonClick = () => {
+
+        const token = {
+            token: document.cookie
+        }
         fetch ('http://127.0.0.1:5000/api/garagesales/register', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-            },
+            }, 
+            body: JSON.stringify(token)
+            
         })
         .then(response => response.json())
         .then(data => {
