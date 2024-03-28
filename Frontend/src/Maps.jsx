@@ -1,28 +1,52 @@
-import {GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
-import {useMemo} from 'react';
-import "./Maps.css"
-
+import React, { useState } from 'react';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 
 const Maps = () => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyAVPNguzZzl6ZCrE4jFBLl-fsYp9B6iT90',
+    googleMapsApiKey: '', // Replace with your Google Maps API key
   });
 
-  const center = useMemo(() => ({ lat: 33.206379, lng: -97.151047 }), []);
+  const [map, setMap] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
+
+  // Function to get user's current location
+  const getPosition = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ lat: latitude, lng: longitude });
+          if (map) {
+            map.panTo({ lat: latitude, lng: longitude });
+          }
+        },
+        (error) => {
+          console.error('Error getting user location:', error);
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by your browser.');
+    }
+  };
+
+  // Center of the map (fallback if user location not available)
+  const center = { lat: 33.206379, lng: -97.151047 };
 
   return (
-    <div className="Maps">
+    <div style={{ height: '95%', width: '100%' }}>
       {!isLoaded ? (
-        <h1>Loading...</h1>
+        <div>Loading...</div>
       ) : (
         <GoogleMap
-          mapContainerClassName="map-container"
-          center={center}
-          zoom={10}
+          mapContainerStyle={{ height: '100%', width: '100%' }}
+          zoom={15}
+          center={userLocation || center}
+          onLoad={(map) => setMap(map)}
         >
-          <Marker position={{lat: 33.206379, lng: -97.151047}} />
-          </GoogleMap>
+          {userLocation && <Marker position={userLocation} />}
+        </GoogleMap>
       )}
+      <button onClick={getPosition}>Get My Location</button>
     </div>
   );
 };
