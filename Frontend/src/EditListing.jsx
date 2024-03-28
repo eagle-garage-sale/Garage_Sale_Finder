@@ -193,6 +193,8 @@ export function EditListing() {
 
             <Components.CenteredWrapper>
 
+            <Components.ScrollableContent>
+
             <Components.Container>
                 <Components.Form>
                     <Components.Title>Address</Components.Title>
@@ -262,6 +264,7 @@ export function EditListing() {
                 </Components.Form>
             </Components.Container>
             
+            </Components.ScrollableContent>
             
             </Components.CenteredWrapper>
         </div>

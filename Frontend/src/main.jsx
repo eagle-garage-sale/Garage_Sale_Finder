@@ -31,7 +31,7 @@ ReactDOM.render(
       <Route path="/home" element={<Home/>}  />
       <Route path="/login" element={<Login_Main/>}  />
       <Route path ="/editlisting" element = { hasCurrentListing ? ( <EditListing /> ) : ( <EditListingError />) } />
-      <Route path ="/listingpage" element={<ListingPage/>} />
+      <Route path="/listingpage/:id" element={<ListingPage/>} />
 
     </Routes>
   </BrowserRouter>,

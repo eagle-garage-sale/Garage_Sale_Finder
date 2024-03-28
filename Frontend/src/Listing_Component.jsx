@@ -22,14 +22,13 @@ export default function ShowListing(props)
     // Construct formatted time string
     return `${formattedHour}:${formattedMinutes} ${amOrPm}`;
 
-      };
+    };
+
+    const data = { name: 'Oz'};
 
     return (
         <div className='listing-details' key={props.id}>
-            <Link to={{
-                pathname: `/listingpage`,
-                state: props
-            }}>
+            <Link to={{ pathname: `/listingpage/${props.id}`, state: data }}>
             <h3>
                  {props.street_address}, {props.state}
             </h3>
