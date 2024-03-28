@@ -5,6 +5,7 @@ import { KEYWORDS } from './keywords';
 import './tagstyle.css';
 import { Link } from "react-router-dom";
 import GetListingsByIdJSON from './utils/GetListingsByID';
+import buildObjectArray from './utils/BuildListingArray'
 
 
 
