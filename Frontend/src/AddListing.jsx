@@ -219,19 +219,21 @@ function AddListing() {
             })
             .then(response => response.json())
             .then(data => {
-                if(data.success) {
+                if(data.success == true) {
                     console.log('Registration successful');
                     window.location.reload();
+                    buildObjectArray();
+                    navigate('/home');
+
                 } else {
+                    alert(data.msg);
                     console.error(data.msg);
                 }
             })
             .catch(error => {
                 console.error(error);
             });
-            buildObjectArray();
-            navigate('/home');
-
+            
         }
 
         setErrors(errors);

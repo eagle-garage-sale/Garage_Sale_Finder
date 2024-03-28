@@ -146,10 +146,11 @@ export function EditListing() {
         })
         .then(response => response.json())
         .then(data => {
-            if(data.success) {
+            if(data.success == true) {
                 console.log('Update successful');
                 window.location.reload();
             } else {
+                alert(data.msg);
                 console.error(data.msg);
             }
         })
