@@ -222,9 +222,6 @@ function AddListing() {
                 if(data.success == true) {
                     console.log('Registration successful');
                     window.location.reload();
-                    buildObjectArray();
-                    navigate('/home');
-
                 } else {
                     alert(data.msg);
                     console.error(data.msg);
@@ -233,6 +230,10 @@ function AddListing() {
             .catch(error => {
                 console.error(error);
             });
+            
+            buildObjectArray();
+            navigate('/home');
+
             
         }
 
