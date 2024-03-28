@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home_Styles.css';
 import Maps from './Maps';
 import Navbar from './Navbar'
@@ -12,15 +12,14 @@ import ShowListing from './Listing_Component';
 
 
 
-export default function Home() {
 
-  //Get our listings from backend and build a readable object array
-  //whose contents will be passes as props in collection.map
+export default function Home() {
+  
+
   GetListingJSON();
   const collection = buildObjectArray();
 
   const listings = collection.map(function(item) {
-
     return (
       <ShowListing
        key = {item.id}
@@ -28,8 +27,9 @@ export default function Home() {
     )
   })
 
-
+  
   return (
+    
     <div className="home-text">
       
       <Navbar/>

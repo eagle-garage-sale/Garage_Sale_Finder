@@ -5,6 +5,7 @@ import { KEYWORDS } from './keywords';
 import './tagstyle.css';
 import { Link } from "react-router-dom";
 import GetListingsByIdJSON from './utils/GetListingsByID';
+import buildObjectArray from './utils/BuildListingArray'
 
 
 
@@ -145,10 +146,11 @@ export function EditListing() {
         })
         .then(response => response.json())
         .then(data => {
-            if(data.success) {
+            if(data.success == true) {
                 console.log('Update successful');
                 window.location.reload();
             } else {
+                alert(data.msg);
                 console.error(data.msg);
             }
         })

@@ -140,27 +140,32 @@ def create_app():
             else:
                 return {"sucess": False,
                         "msg": "Bad JWT token"}, 401
+            
+            user_garage_sale = AccessGarageSales.GetGarageSalesByUserId(_user_id)
 
-        
-            # Make a new garage sale object from the values specified above
-            new_sale = GarageSales(street_address = _street_address,
-                                    state = _state, city = _city, zip_code = _zip_code,
-                                        user_id = _user_id, start_date = _start_date,
-                                        end_date = _end_date, open_time = _open_time,
-                                            close_time = _close_time, description = _description, tag = _tag,
-                                            latitude = coordinates[0], longitude = coordinates[1])
+            if not user_garage_sale:
+                    
+                # Make a new garage sale object from the values specified above
+                new_sale = GarageSales(street_address = _street_address,
+                                        state = _state, city = _city, zip_code = _zip_code,
+                                            user_id = _user_id, start_date = _start_date,
+                                            end_date = _end_date, open_time = _open_time,
+                                                close_time = _close_time, description = _description, tag = _tag,
+                                                latitude = coordinates[0], longitude = coordinates[1])
 
-            # Perform insertion query to GarageSales table and finalize query.
-            db.session.add(new_sale)
-            db.session.commit()
+                # Perform insertion query to GarageSales table and finalize query.
+                db.session.add(new_sale)
+                db.session.commit()
 
-            # Add images
 
-            # Return HTTP code 200 (success) upon completion. 
-            return {"success": True,
-                    "garageSaleID": new_sale.id,
-                    "msg": "The garage sale was successfully registered"}, 200
-        
+                # Return HTTP code 200 (success) upon completion. 
+                return {"success": True,
+                        "garageSaleID": new_sale.id,
+                        "msg": "The garage sale was successfully registered"}, 200
+            else:
+                return {"success": False,
+                        "msg": "You already have a garage sale listing, either delete your sale or wait for the current one to expire."}
+            
 
         @api.expect(token_model, validate=True)  
         def delete(self):

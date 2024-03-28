@@ -7,6 +7,7 @@ import { WithContext as ReactTags } from 'react-tag-input';
 import profanity from 'leo-profanity';
 import axios from "axios";
 import * as FormData from "form-data";
+import buildObjectArray from './utils/BuildListingArray'
 
 
 function getDate() {
@@ -142,6 +143,7 @@ function AddListing() {
 
     const handleButtonClick = (event) => {
         event.preventDefault();
+
         
         const errors = validateValues({
             streetAddress,
@@ -217,19 +219,21 @@ function AddListing() {
             })
             .then(response => response.json())
             .then(data => {
-                if(data.success) {
+                if(data.success == true) {
                     console.log('Registration successful');
                     window.location.reload();
+                    buildObjectArray();
+                    navigate('/home');
 
                 } else {
+                    alert(data.msg);
                     console.error(data.msg);
                 }
             })
             .catch(error => {
                 console.error(error);
             });
-            navigate('/home');
-
+            
         }
 
         setErrors(errors);
