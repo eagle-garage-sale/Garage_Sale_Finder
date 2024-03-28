@@ -42,14 +42,13 @@ export const header = styled.div`
 export const Container = styled.div`
 background-color: #fff;
 border-radius: 10px;
-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 position: relative;
-overflow: hidden;
+overflow-y: auto;
+overflow-x: hidden;
 width: 700px;
 max-width: 100%;
-min-height: 850px;
+max-height: calc(100vh - 100px);
 margin-top: 100px;
-margin-bottom: 10px;
 justify-content: center;
 /* Add margin to space out the containers */
 `;
@@ -57,7 +56,7 @@ justify-content: center;
 export const CenteredWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin: 50px auto;
+  top-margin: 10px;
 `;
 
 export const DoubleContainer = styled.div`
@@ -78,7 +77,7 @@ export const DoubleContainer = styled.div`
 export const ContainerWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin: 50px auto;
+
 `;
 
 export const Form = styled.form`
@@ -194,4 +193,10 @@ export const Tag = styled.div`
   &:hover {
     background-color: #1a945b;
   }
+`;
+
+export const ScrollableContent = styled.div`
+  max-height: 1000px; /* Set a fixed height for the scrollable content */
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds the fixed height */
+
 `;

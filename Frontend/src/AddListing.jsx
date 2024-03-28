@@ -242,11 +242,12 @@ function AddListing() {
 
     return (
         <div className="form-text">
-
             <Components.header>Add Garage Sale Listing</Components.header>
 
             <Components.CenteredWrapper>
         
+            <Components.ScrollableContent>
+
             <Components.Container>
                 <Components.Form>
 
@@ -316,6 +317,7 @@ function AddListing() {
                 </Components.Form>
             </Components.Container>
             
+            </Components.ScrollableContent>
             
             </Components.CenteredWrapper>
         </div>

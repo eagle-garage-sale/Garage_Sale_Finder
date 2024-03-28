@@ -1,4 +1,5 @@
 import React, { Component, useState} from "react";
+import { Link } from 'react-router-dom';
 import * as Components from './Login_Components';
 
 export default function ShowListing(props)
@@ -21,13 +22,17 @@ export default function ShowListing(props)
     // Construct formatted time string
     return `${formattedHour}:${formattedMinutes} ${amOrPm}`;
 
-      };
+    };
+
+    const data = { name: 'Oz'};
 
     return (
         <div className='listing-details' key={props.id}>
+            <Link to={{ pathname: `/listingpage/${props.id}`, state: data }}>
             <h3>
                  {props.street_address}, {props.state}
             </h3>
+            </Link>
             <p>
                 {formatDate(props.start_date)} - {formatDate(props.end_date)}
             </p>
