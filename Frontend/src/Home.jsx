@@ -33,8 +33,7 @@ export default function Home() {
     <div className="home-text">
       
       <Navbar/>
-      <div className="left-column">
-
+      <Components.Container>
         <ul className='listing'>
           <li className='listing-item'>
             <div className='listing-details'>
@@ -42,13 +41,10 @@ export default function Home() {
             </div>
           </li>
         </ul>
-      </div>  
-      <div className='right-column'>
+      </Components.Container>
+      <Components.Map>
         <Maps />
-      <Components.header>Garage Sale Finder</Components.header>
-      <div className="left-column" />
-      <Maps />
-      </div>
+      </Components.Map>
     </div>
   );
 }

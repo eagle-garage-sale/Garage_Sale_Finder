@@ -15,3 +15,14 @@ export const header = styled.div`
   font-size: 30px;
 `;
 
+export const Container = styled.div`
+width: 800px;
+height: 100%;
+overflow-y: auto;
+`;
+
+export const Map = styled.div`
+width: 100%;
+height: 100%;
+`;
+

@@ -40,6 +40,7 @@ export const header = styled.div`
 `;
 
 export const Container = styled.div`
+
 background-color: #fff;
 border-radius: 10px;
 position: relative;
