@@ -6,8 +6,10 @@ export default function ShowListing(props)
 {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString();
-      };
+        const options = { timeZone: 'UTC' }; // Specify the time zone as UTC
+        return date.toLocaleDateString('en-US', options);
+    };
+    
 
     const formatTime = (timeString) => {
         const [hours, minutes] = timeString.split(':');

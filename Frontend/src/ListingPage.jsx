@@ -16,7 +16,7 @@ export default function ListingPage() {
     const listing = collection.find(item => item.id === idToFind);
 
     const formatDate = (dateString) => {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', options);
     };
