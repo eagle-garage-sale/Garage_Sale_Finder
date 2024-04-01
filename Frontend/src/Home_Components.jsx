@@ -15,10 +15,17 @@ export const header = styled.div`
   font-size: 30px;
 `;
 
+
+export const keywordContainer = styled.div`
+width: 800px;
+height: 100px;
+`;
+
 export const Container = styled.div`
 width: 800px;
 height: 100%;
 overflow-y: auto;
+overflow-x: hidden;
 `;
 
 export const Map = styled.div`

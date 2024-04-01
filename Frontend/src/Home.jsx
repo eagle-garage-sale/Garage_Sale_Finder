@@ -34,6 +34,7 @@ export default function Home() {
       
       <Navbar/>
       <Components.Container>
+      <Components.keywordContainer></Components.keywordContainer>
         <ul className='listing'>
           <li className='listing-item'>
             <div className='listing-details'>
