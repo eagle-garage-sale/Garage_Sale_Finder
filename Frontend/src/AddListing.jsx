@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { KEYWORDS } from './keywords';
 import './tagstyle.css';
@@ -31,6 +31,13 @@ function AddListing() {
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState([]);
     const [errors, setErrors] = useState({});
+
+    const titleInputRef = useRef(null); // Create a reference to the title input element
+
+    useEffect(() => {
+        // Set focus on the title input field when the component mounts
+        titleInputRef.current.focus();
+    }, []);
 
     //File states
     const [files, setFiles] = useState(null);
@@ -66,8 +73,18 @@ function AddListing() {
         if (inputValues.title.trim() == '') {
             errors.title = 'Please enter a title';
         }
+        else if (inputValues.title.length < 4) {
+            errors.title = 'Has to be at least 4 characters'
+        }
+        else if (profanity.check(inputValues.title)) {
+            errors.title = 'Contains profanity'
+        }
+
         if (inputValues.streetAddress.trim() == '') {
             errors.streetAddress = 'Please enter a street address';
+        }
+        else if (profanity.check(inputValues.streetAddress)) {
+            errors.streetAddress = 'Contains profanity'
         }
         if (inputValues.state.trim() == '') {
             errors.state = 'Please select a state';
@@ -108,10 +125,14 @@ function AddListing() {
         if(inputValues.description.trim() == '') {
             errors.description = 'Please enter a description'
         }
-        else {
-            if (profanity.check(inputValues.description)) {
-                errors.description = 'Contains profanity'
-            }
+        else if (profanity.check(inputValues.description)) {
+            errors.description = 'Contains profanity'
+        }
+        else if (inputValues.description.length < 4) {
+            errors.description = 'Has to be at least 4 characters'
+        }
+        if(tags.length === 0) {
+            errors.tags = 'Please add at least one tag'
         }
 
         return errors;
@@ -147,7 +168,6 @@ function AddListing() {
 
     const handleButtonClick = (event) => {
         event.preventDefault();
-
         
         const errors = validateValues({
             title,
@@ -159,7 +179,8 @@ function AddListing() {
             endDate,
             openTime,
             closeTime,
-            description
+            description,
+            tags
         });
 
         if (Object.keys(errors).length == 0) {
@@ -259,7 +280,7 @@ function AddListing() {
                 <Components.Form>
 
                     <Components.Title>Title</Components.Title>
-                    <Components.TitleInput type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
+                    <Components.TitleInput ref={titleInputRef} type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
                     {errors.title && <div style={{ color: 'red', marginTop: '1px' }}>{errors.title}</div>}
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
@@ -304,6 +325,7 @@ function AddListing() {
                     <Components.DescriptionInput type='description' placeholder='500 Characters Max' value = {description} onChange={(e) => setDescription(e.target.value)}/>
                     {errors.description && <div style={{ color: 'red', marginTop: '1px' }}>{errors.description}</div>}
                     <Components.Title>Keywords</Components.Title>
+                    {errors.tags && <div style={{color: 'red', marginTop: '1px' }}>{errors.tags}</div>}
                     <ReactTags
                        tags={tags}
                        suggestions={suggestions}
@@ -312,10 +334,9 @@ function AddListing() {
                        handleAddition={handleAddition}
                        handleDrag={handleDrag}
                        handleTagClick={handleTagClick}
-                       inputFieldPosition="bottom"
+                       inputFieldPosition="top"
                        autocomplete
                         />
-
                     <input onChange={ (e) => { setFiles(e.target.files) }} type="file" multiple/>
                     <Components.Button
                     onClick = {handleButtonClick}>

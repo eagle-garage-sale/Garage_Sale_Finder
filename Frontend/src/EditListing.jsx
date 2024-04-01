@@ -1,13 +1,21 @@
-import React, {Component, useState, useEffect} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import * as Components from './AddListing_Components';
 import { WithContext as ReactTags } from 'react-tag-input';
 import { KEYWORDS } from './keywords';
 import './tagstyle.css';
+import profanity from 'leo-profanity';
 import { Link } from "react-router-dom";
 import GetListingsByIdJSON from './utils/GetListingsByID';
-import buildObjectArray from './utils/BuildListingArray'
+import buildObjectArray from './utils/BuildListingArray';
+import { useNavigate } from "react-router-dom"
 
-
+function getDate() {
+    const today = new Date();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const year = today.getFullYear();
+    const date = today.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${date}`;
+}
 
 export function EditListingError() {
   return (
@@ -31,7 +39,16 @@ export function EditListing() {
     const [closeTime, setCloseTime] = useState('');
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState([]);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errors, setErrors] = useState({});
+
+    const titleInputRef = useRef(null); // Create a reference to the title input element
+
+    useEffect(() => {
+        // Set focus on the title input field when the component mounts
+        titleInputRef.current.focus();
+    }, []);
+
+    const navigate = useNavigate();
 
     //fetch data listing and update state variables
     useEffect(() => {
@@ -88,6 +105,76 @@ export function EditListing() {
       
     const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
+      const validateValues = (inputValues) => {
+        let errors = {};
+        if (inputValues.title.trim() == '') {
+            errors.title = 'Please enter a title';
+        }
+        else if (inputValues.title.length < 4) {
+            errors.title = 'Has to be at least 4 characters'
+        }
+        else if (profanity.check(inputValues.title)) {
+            errors.title = 'Contains profanity'
+        }
+
+        if (inputValues.streetAddress.trim() == '') {
+            errors.streetAddress = 'Please enter a street address';
+        }
+        else if (profanity.check(inputValues.streetAddress)) {
+            errors.streetAddress = 'Contains profanity'
+        }
+        if (inputValues.state.trim() == '') {
+            errors.state = 'Please select a state';
+        }
+        if (inputValues.city.trim() == '') {
+            errors.city = 'Please enter a city'
+        }
+        if (inputValues.zipcode.trim() == '') {
+            errors.zipcode = 'Please enter a zipcode'
+        }
+        else {
+            if (inputValues.zipcode.length < 5 || /^\d+$/.test(inputValues.zipcode) == false) {
+                errors.zipcode = 'Zipcode is invalid'
+            }
+        }
+        if (inputValues.startDate.trim() == '') {
+            errors.startDate = 'Please enter a date'
+        }
+        else {
+            if (inputValues.startDate < getDate()) {
+                errors.startDate = 'Date is invalid'
+            }
+        }
+        if (inputValues.endDate.trim() == '') {
+            errors.endDate = 'Please enter a date'
+        }
+        else {
+            if (inputValues.endDate < inputValues.startDate) {
+                errors.endDate = 'Date is invalid'
+            }
+        }
+        if(inputValues.openTime.trim() == '') {
+            errors.openTime = 'Please enter a time'
+        }
+        if(inputValues.closeTime.trim() == '') {
+            errors.closeTime = 'Please enter a time'
+        }
+        if(inputValues.description.trim() == '') {
+            errors.description = 'Please enter a description'
+        }
+        else if (profanity.check(inputValues.description)) {
+            errors.description = 'Contains profanity'
+        }
+        else if (inputValues.description.length < 4) {
+            errors.description = 'Has to be at least 4 characters'
+        }
+        if(tags.length === 0) {
+            errors.tags = 'Please add at least one tag'
+        }
+
+        return errors;
+      }
+
     const handleDelete = (i) => {
         setTags(tags.filter((tag, index) => index !== i));
     };
@@ -113,20 +200,29 @@ export function EditListing() {
     console.log('The tag at index ' + index + ' was clicked');
   };
     
-    const handleButtonClick = () => {
-        setErrorMessage('');   
+    const handleButtonClick = (event) => {
+        event.preventDefault();
 
-        if (streetAddress.trim() === '') {
-            setErrorMessage('Please enter a street address');
-            return; // Stop further execution if there's an error
-        }
-        if (state.trim() === '') {
-            setErrorMessage('Please enter a state');
-            return;
-        }
-     
+        const errors = validateValues({
+            title,
+            streetAddress,
+            state,
+            city,
+            zipcode,
+            startDate,
+            endDate,
+            openTime,
+            closeTime,
+            description,
+            tags
+        });
+        
+        console.log(Object.keys(errors).length);
+
+        if (Object.keys(errors).length == 0) {
         console.log("Button clicked");
-
+        Delete();
+        
         const tagsString = tags.map(tag => tag.text).join(',');
 
         const garageData = {
@@ -163,8 +259,39 @@ export function EditListing() {
         .catch(error => {
             console.error(error);
         });
+
+        navigate('/home');  
+
+        }
+
+        setErrors(errors);
     };
 
+    const Delete = () => {
+        const token = {
+            token: document.cookie
+        }
+        fetch ('http://127.0.0.1:5000/api/garagesales/register', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }, 
+            body: JSON.stringify(token)
+            
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Deletion Successful");
+            }
+            else {
+                console.error(data.msg);
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        })
+    }
 
     const DeleteButtonClick = () => {
 
@@ -191,6 +318,8 @@ export function EditListing() {
         .catch(error => {
             console.error(error);
         })
+
+        navigate('/home');
     };
     
 
@@ -206,28 +335,32 @@ export function EditListing() {
             <Components.Container>
                 <Components.Form>
                     <Components.Title>Title</Components.Title>
-                    <Components.TitleInput type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
+                    <Components.TitleInput ref={titleInputRef} type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
+                    {errors.title && <div style={{ color: 'red', marginTop: '1px' }}>{errors.title}</div>}
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
-                    {errorMessage && <div style={{ color: 'red', marginTop: '1px' }}>{errorMessage}</div>}
+                    {errors.streetAddress && <div style={{ color: 'red', marginTop: '1px' }}>{errors.streetAddress}</div>}
                     <Components.Select type='State' placeholder='State' value = {state} onChange={(e) => setState(e.target.value)}>
-                    {errorMessage && <div style={{ color: 'red', marginTop: '1px' }}>{errorMessage}</div>}
                         <option value ='' disabled>State</option>
                         {states.map((stateOption, index) => (
                              <option key={index} value={stateOption}>{stateOption}</option>
                              ))}
                     </Components.Select>        
+                    {errors.state && <div style={{ color: 'red', marginTop: '1px' }}>{errors.state}</div>}        
                     <Components.CityInput type='City' placeholder='City' value = {city} onChange={(e) => setCity(e.target.value)}/>
+                    {errors.city && <div style={{ color: 'red', marginTop: '1px' }}>{errors.city}</div>}
                     <Components.ZipCodeInput type='Zipcode' placeholder='Zipcode' value = {zipcode} onChange={(e) => setZipcode(e.target.value)}/>
-
+                    {errors.zipcode && <div style={{ color: 'red', marginTop: '1px' }}>{errors.zipcode}</div>}
                     <Components.DoubleContainer>
                         <div>
                             <Components.Title>Start Date</Components.Title>
                             <Components.DateInput type='date' value = {startDate} onChange={(e) => setStartDate(e.target.value)}/>
+                            {errors.startDate && <div style={{ color: 'red', marginTop: '1px' }}>{errors.startDate}</div>}
                         </div>
                         <div>
                             <Components.Title>End Date</Components.Title>
                             <Components.DateInput type='date' value = {endDate} onChange={(e) => setEndDate(e.target.value)}/>
+                            {errors.endDate && <div style={{ color: 'red', marginTop: '1px' }}>{errors.endDate}</div>}
                         </div>
                     </Components.DoubleContainer>
 
@@ -235,15 +368,19 @@ export function EditListing() {
                         <div>
                             <Components.Title>Opening Time</Components.Title>
                             <Components.TimeInput type='time' value = {openTime} onChange={(e) => setOpenTime(e.target.value)}/>
+                            {errors.openTime && <div style={{ color: 'red', marginTop: '1px' }}>{errors.openTime}</div>}
                         </div>
                         <div>
                             <Components.Title>Closing Time</Components.Title>
                             <Components.TimeInput type='time' value = {closeTime} onChange={(e) => setCloseTime(e.target.value)}/>
+                            {errors.closeTime && <div style={{ color: 'red', marginTop: '1px' }}>{errors.closeTime}</div>}
                         </div>
                     </Components.DoubleContainer>
                     <Components.Title>Description</Components.Title>
                     <Components.DescriptionInput type='description' placeholder='500 Characters Max' value = {description} onChange={(e) => setDescription(e.target.value)}/>
+                    {errors.description && <div style={{ color: 'red', marginTop: '1px' }}>{errors.description}</div>}
                     <Components.Title>Keywords</Components.Title>
+                    {errors.tags && <div style={{color: 'red', marginTop: '1px' }}>{errors.tags}</div>}
                     <ReactTags
                        tags={tags}
                        suggestions={suggestions}
@@ -256,7 +393,7 @@ export function EditListing() {
                        autocomplete
                         />
                      <div style={{ position: 'absolute', left: '18%', top: '90%',transform: 'translate(-50%, -50%)' }}>
-                        <Components.Button onClick={() => { DeleteButtonClick(); handleButtonClick(); }}>
+                        <Components.Button onClick={handleButtonClick}>
                             Edit Listing
                      </Components.Button>
                     </div>

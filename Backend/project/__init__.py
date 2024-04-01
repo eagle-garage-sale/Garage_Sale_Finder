@@ -56,7 +56,7 @@ def create_app():
     CORS(app)
 
    
-    garagesale_model = api.model('GarageSaleModel', {"title": fields.String(required=True, min_length=5, max_lenght=100),
+    garagesale_model = api.model('GarageSaleModel', {"title": fields.String(required=True, min_length=4, max_lenght=100),
                                                     "street_address": fields.String(required=True, min_length=5, max_length=100),
                                                         "state": fields.String(required=True, min_length=2, max_length=2),
                                                         "city": fields.String(required=True, min_length=1, max_length=100),
