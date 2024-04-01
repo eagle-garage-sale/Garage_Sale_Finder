@@ -60,7 +60,10 @@ export function EditListing() {
             setOpenTime(collection[0].open_time);
             setCloseTime(collection[0].close_time);
             setDescription(collection[0].description);
-            //setTags(collection[0].tag);
+
+            const tagsArray = collection[0].tag.split(',');
+            const tagsObjectsArray = tagsArray.map(tag => ({ id: tag, text: tag }));
+            setTags(tagsObjectsArray);
         }
     }, []);
     
