@@ -207,7 +207,6 @@ export function EditListing() {
                 <Components.Form>
                     <Components.Title>Title</Components.Title>
                     <Components.TitleInput type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
-                    {errors.title && <div style={{ color: 'red', marginTop: '1px' }}>{errors.title}</div>}
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
                     {errorMessage && <div style={{ color: 'red', marginTop: '1px' }}>{errorMessage}</div>}
