@@ -55,7 +55,7 @@ margin: 0.5;
 
 export const Map = styled.div`
 width: 800px;
-margin-top:-472px;
+margin-top:-521px;
 margin-left: 900px;
 border-radius: 10px;
 overflow: hidden;

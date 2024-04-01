@@ -43,9 +43,6 @@ export default function ShowListing(props)
                 Hours: {formatTime(props.open_time)} - {formatTime(props.close_time)}
             </p>
             <p>
-                {props.description}
-            </p>
-            <p>
                 Tags: {props.tag}
             </p>
         </div>

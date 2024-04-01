@@ -19,7 +19,8 @@ export function EditListingError() {
 }
 
 
-export function EditListing() {                                 
+export function EditListing() {     
+    const [title, setTitle] = useState('');                            
     const [streetAddress, setStreetAddress] = useState('');
     const [state, setState] = useState('');
     const [city, setCity] = useState('');
@@ -49,6 +50,7 @@ export function EditListing() {
 
         //if there is userdata, populate the form.
         if (userData) {
+            setTitle(collection[0].title);
             setStreetAddress(collection[0].street_address);
             setState(collection[0].state);
             setCity(collection[0].city);
@@ -125,6 +127,7 @@ export function EditListing() {
         const tagsString = tags.map(tag => tag.text).join(',');
 
         const garageData = {
+            title: title,
             street_address: streetAddress,
             state: state,
             city: city,
@@ -199,6 +202,9 @@ export function EditListing() {
 
             <Components.Container>
                 <Components.Form>
+                    <Components.Title>Title</Components.Title>
+                    <Components.TitleInput type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
+                    {errors.title && <div style={{ color: 'red', marginTop: '1px' }}>{errors.title}</div>}
                     <Components.Title>Address</Components.Title>
                     <Components.AddressInput type='Street Address' placeholder='Street Address' value = {streetAddress} onChange={(e) => setStreetAddress(e.target.value)}/>
                     {errorMessage && <div style={{ color: 'red', marginTop: '1px' }}>{errorMessage}</div>}

@@ -56,7 +56,8 @@ def create_app():
     CORS(app)
 
    
-    garagesale_model = api.model('GarageSaleModel', {"street_address": fields.String(required=True, min_length=5, max_length=100),
+    garagesale_model = api.model('GarageSaleModel', {"title": fields.String(required=True, min_length=5, max_lenght=100),
+                                                    "street_address": fields.String(required=True, min_length=5, max_length=100),
                                                         "state": fields.String(required=True, min_length=2, max_length=2),
                                                         "city": fields.String(required=True, min_length=1, max_length=100),
                                                         "zip_code": fields.String(required=True, min_length=5, max_length=10),
@@ -116,6 +117,7 @@ def create_app():
             print(req_data)
 
             #Take values from specified JSON keys and get the user_id from jwt token
+            _title = req_data.get("title")
             _street_address = req_data.get("street_address")
             _state = req_data.get("state")
             _city = req_data.get("city")
@@ -146,7 +148,8 @@ def create_app():
             if not user_garage_sale:
                     
                 # Make a new garage sale object from the values specified above
-                new_sale = GarageSales(street_address = _street_address,
+                new_sale = GarageSales( title = _title,
+                                        street_address = _street_address,
                                         state = _state, city = _city, zip_code = _zip_code,
                                             user_id = _user_id, start_date = _start_date,
                                             end_date = _end_date, open_time = _open_time,
