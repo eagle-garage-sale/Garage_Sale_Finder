@@ -30,9 +30,12 @@ export default function ShowListing(props)
         <div className='listing-details' key={props.id}>
             <Link to={{ pathname: `/listingpage/${props.id}`, state: data }}>
             <h3>
-                 {props.street_address}, {props.state}
+                 {props.title}
             </h3>
             </Link>
+            <p>
+                {props.street_address},  {props.state}
+            </p>
             <p>
                 {formatDate(props.start_date)} - {formatDate(props.end_date)}
             </p>

@@ -60,6 +60,7 @@ class Users(db.Model):
 class GarageSales(db.Model):
     __tablename__ = "garage_sales"
     id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(100), nullable = False)
     street_address = db.Column(db.String(100), nullable = False)
     state = db.Column(db.String(3), nullable = False)
     city = db.Column(db.String(30), nullable = False)
