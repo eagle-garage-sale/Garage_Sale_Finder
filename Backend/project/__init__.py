@@ -6,6 +6,8 @@ from flask_restx import Api, fields, Resource
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import base64
+import json
+from PIL import Image
 
 db = SQLAlchemy()
 
@@ -134,8 +136,27 @@ def create_app():
             #Go through the specified image folder and convert 
             for filename in image_names:
                 img = os.path.join(user_folder_path, filename)
-                img_string = base64.b64encode(img)
-                base64_image_collection.append(img_string)
+                with open(img, "rb") as f:
+                    encoded_image = base64.b64encode(f.read())
+                    base64_image_collection.append(encoded_image)
+                    print(encoded_image)
+
+            #Convert the base64_image_collection into JSON 
+            json_str = "["
+            i = 0
+            for image in base64_image_collection:
+                image = image.decode('utf-8')
+                print(type(image))
+                if len(base64_image_collection) > 1 and i < len(base64_image_collection) - 1:
+                    json_str += json.dumps(image) + ','
+                else:
+                    json_str += json.dumps(image)
+                i += 1
+
+            json_str +=']'
+        
+            return {"success": True,
+                        "images": json_str}, 200
             
 
     

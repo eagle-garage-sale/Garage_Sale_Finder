@@ -23,7 +23,7 @@ class UserRecordDAO():
     # This getter function should return a single User object
     # as it searches by user_id
     def GetUserById(self, user_id):
-        user = User.query.filter_by(id = user_id).first()
+        user = Users.query.filter_by(id = user_id).first()
         if user:
             return User(user.id, user.username, user.email, user.password)
         else:

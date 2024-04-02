@@ -9,6 +9,7 @@ import listing from './Listing_Component';
 import GetListingJSON from './utils/GetListings';
 import buildObjectArray from './utils/BuildListingArray';
 import ShowListing from './Listing_Component';
+import BigImage from './Image_Component';
 
 
 
@@ -18,6 +19,8 @@ export default function Home() {
 
   GetListingJSON();
   const collection = buildObjectArray();
+
+  
 
   const listings = collection.map(function(item) {
     return (
@@ -40,6 +43,8 @@ export default function Home() {
             <div className='listing-details'>
             {listings}
             </div>
+            <BigImage 
+            image={{}}></BigImage>
           </li>
         </ul>
       </div>  
