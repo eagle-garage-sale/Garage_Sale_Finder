@@ -17,8 +17,9 @@ export const header = styled.div`
 
 
 export const keywordContainer = styled.div`
-width: 800px;
-height: 100px;
+  margin-top: 165px;
+  margin-left: 22px;
+  
 `;
 
 export const Container = styled.div`

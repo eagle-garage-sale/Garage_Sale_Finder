@@ -6,6 +6,14 @@
   overflow: hidden; 
 }
 
+.flex-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.keywordContainer {
+  flex: 1
+}
 
 .home-text {
     background: #f6f5f7;
@@ -43,7 +51,13 @@
 
 .listing {
   list-style: none;
-  padding-top: 120px;
+  padding-top: 5px;
+  margin-top: -30px;
+  margin-left: -25px;
+  display:flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto; 
 }
 
 .listing-item {
@@ -51,6 +65,8 @@
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ccc;
+  flex-grow: 1;
+  overflow-y: auto; 
 }
 
 .listing-item img {

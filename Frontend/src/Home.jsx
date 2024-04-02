@@ -9,7 +9,7 @@ import listing from './Listing_Component';
 import GetListingJSON from './utils/GetListings';
 import buildObjectArray from './utils/BuildListingArray';
 import ShowListing from './Listing_Component';
-
+import SearchListing from './SearchListing';
 
 
 
@@ -34,7 +34,10 @@ export default function Home() {
       
       <Navbar/>
       <Components.Container>
-      <Components.keywordContainer></Components.keywordContainer>
+        <div className="flex-container">
+          <Components.keywordContainer>
+            <SearchListing />
+          </Components.keywordContainer>
         <ul className='listing'>
           <li className='listing-item'>
             <div className='listing-details'>
@@ -42,6 +45,7 @@ export default function Home() {
             </div>
           </li>
         </ul>
+        </div>
       </Components.Container>
       <Components.Map>
         <Maps />
