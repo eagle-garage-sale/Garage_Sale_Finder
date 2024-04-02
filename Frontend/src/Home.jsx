@@ -47,6 +47,7 @@ export default function Home() {
         <Maps />
       <Components.header>Garage Sale Finder</Components.header>
       <div className="left-column" />
+      
       <Maps />
       </div>
     </div>

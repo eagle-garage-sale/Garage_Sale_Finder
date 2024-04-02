@@ -4,11 +4,10 @@ from project.dbModels import GarageSales
 # The garage sale DAO will read an object from the database and return
 # either a GarageSale object or an array of said objects. The purpose of this
 # DAO is to perform CRUD operations on the database and to simplify readability
-# in the app routes file. A user DAO might later be created to further abstract
-# CRUD operations on the user table.
+# in the app routes file.
 
 
-# This will be an object that is can be returned upon reading a valid record
+# This will be an object that is returned upon reading a valid record
 # from the GarageSale table
 class GarageSale():
     def __init__(self, id, street_address, state, city, zip_code, 

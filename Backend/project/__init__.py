@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api, fields, Resource
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+import base64
 
 db = SQLAlchemy()
 
@@ -45,10 +46,14 @@ def create_app():
     from project.JWT import CreateJWT, decodeJWT, extract_id, extract_email
     from project.geocoding import ObtainCoordinates, ObtainGeoCodingApiData
     from project.garageSaleDAO import GarageSaleDAO
+    from project.userRecordDAO import UserRecordDAO
 
     #This object is how we will manipulate our collection of garage sales in memory
     #It's also our way of converting this data to JSON for frontend delivery
     AccessGarageSales = GarageSaleDAO()
+
+    #This object is how we will manipulate user objects in memory
+    AccessUsers = UserRecordDAO()
 
     # api models ensure that data provided by front end matches these specifications. JSON keys must match the
     # names of these values in order for this to work.
@@ -85,23 +90,55 @@ def create_app():
     def hello():
         return {"msg": "HELLO!"}, 200
     
-    @app.route('/garagesales/addImage', methods=['POST', 'GET'])
-    def fileUpload():
+    @app.route('/garagesales/ImageUpload', methods=['POST'])
+    def imageHandler():
 
-        username = request.form.get("username")
-        
-        user_folder = os.path.join(app.config['UPLOAD_FOLDER'], username)
-        if request.method == 'POST':
-            file = request.files.getlist('file')
-            for f in file:
-                filename = secure_filename(f.filename)
-                if allowedFile(filename):
-                    f.save(os.path.join(user_folder, filename))
-                else:
-                    return jsonify({'message': 'File type not allowed'}), 400
-            return jsonify({"name": filename, "status": "success"})
-        else:
-            return jsonify({"status": "failed"})
+        #Image uploads
+        if request.method == "POST":
+            username = request.form.get("username")
+            
+            user_folder = os.path.join(app.config['UPLOAD_FOLDER'], username)
+            if request.method == 'POST':
+                file = request.files.getlist('file')
+                for f in file:
+                    filename = secure_filename(f.filename)
+                    if allowedFile(filename):
+                        f.save(os.path.join(user_folder, filename))
+                    else:
+                        return jsonify({'message': 'File type not allowed'}), 400
+                return jsonify({"name": filename, "status": "success"})
+            else:
+                return jsonify({"status": "failed"})
+            
+    @app.route('/garagesales/ImageViewer', methods=['POST'])
+    def imageDownloader():
+        if request.method == "POST":
+
+            #Get json data (the garage sale id)
+            req_data = request.get_json()
+            print(req_data)
+
+            _garage_sale = req_data.get("garage_sale_id")
+
+            #Find user_id based on garage sale id
+            sale = AccessGarageSales.GetGarageSaleBySaleId(_garage_sale)
+            user_id = sale.user_id
+
+            #Get email through user_id
+            user = AccessUsers.GetUserById(user_id)
+            email = user.email.split("@")[0]
+            user_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], email)
+            image_names = os.listdir(user_folder_path)
+            base64_image_collection = []
+
+            #Go through the specified image folder and convert 
+            for filename in image_names:
+                img = os.path.join(user_folder_path, filename)
+                img_string = base64.b64encode(img)
+                base64_image_collection.append(img_string)
+            
+
+    
 
     # POST: Add garage sale entry
     # DELETE: Delete garage sale from passed user id
@@ -292,9 +329,7 @@ def create_app():
             GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
             print (GarageSaleJSON)
             return {'success': True, "msg":"Successfully got garage sale list by user ID!", "sales": GarageSaleJSON}, 200
-    #1. Get Sales from database and put into array
-    #2. Convert array to json
-    #3. Create an api route
+        
 
     return app
 
