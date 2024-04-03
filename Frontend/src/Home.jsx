@@ -19,14 +19,27 @@ export default function Home() {
   GetListingJSON();
   const collection = buildObjectArray();
 
-  const listings = collection.map(function(item) {
-    return (
-      <ShowListing
-       key = {item.id}
-       {...item}/>
-    )
-  })
+  const [selectedTags, setSelectedTags] = useState([]);
 
+  const filteredListings = collection.filter(item => {
+    if (selectedTags.length === 0)
+    {
+      return true; //if no tags are entered, show all listings
+    }
+    //return item.tag.some(tag => selectedTags.includes(tag)) //filters listing based on tags
+    return selectedTags.includes(item.tag);
+  });
+
+  const listings = filteredListings.map(item=> (
+    <ShowListing
+     key = {item.id}
+     {...item}/>
+  ));
+
+  const handleTagSelection = tags => {
+    console.log('Selected tags:', tags);
+    setSelectedTags(tags.map(tag => tag.text))
+  };
   
   return (
     
@@ -36,7 +49,7 @@ export default function Home() {
       <Components.Container>
         <div className="flex-container">
           <Components.keywordContainer>
-            <SearchListing />
+          <SearchListing onTagSelection={handleTagSelection} />
           </Components.keywordContainer>
         <ul className='listing'>
           <li className='listing-item'>

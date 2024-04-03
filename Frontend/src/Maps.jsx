@@ -33,7 +33,7 @@ const Maps = () => {
   const center = { lat: 33.206379, lng: -97.151047 };
 
   return (
-    <div style={{ height: '95%', width: '100%' }}>
+    <div style={{ height: '95%', width: '100%', overflow: 'hidden' }}>
       {!isLoaded ? (
         <div>Loading...</div>
       ) : (

@@ -10,7 +10,7 @@ import * as FormData from "form-data";
 import { Link } from 'react-router-dom';
 import './AddListingButton_Styles.css'
 
-function SearchListing(){
+function SearchListing({ onTagSelection }){
 
     const [tags, setTags] = useState([]);
     const [showSearch, setShowSearch] = useState(false); // Define showSearch state
@@ -53,12 +53,9 @@ function SearchListing(){
     console.log('The tag at index ' + index + ' was clicked');
   };
     
-    const handleButtonClick = () => {
-        setErrorMessage('');   
-    }
 
     const handleSearchClick = () => {
-        setShowSearch(!showSearch);
+        onTagSelection(tags);
     };
 
     return (
@@ -77,7 +74,7 @@ function SearchListing(){
                         placeholder="Filter Listings by Keywords"
                     />
                 </div>
-                <button className="search-button" onClick={handleButtonClick}>Search</button>
+                <button className="search-button" onClick={handleSearchClick}>Search</button>
         </div>
     );
 }
