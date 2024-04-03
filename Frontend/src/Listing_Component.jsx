@@ -35,9 +35,9 @@ export default function ShowListing(props)
                  {props.title}
             </h3>
             </Link>
-            <p>
+            <p><strong>
                 {props.street_address},  {props.state}
-            </p>
+            </strong></p>
             <p>
                 {formatDate(props.start_date)} - {formatDate(props.end_date)}
             </p>
