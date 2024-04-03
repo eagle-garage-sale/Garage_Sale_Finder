@@ -229,14 +229,24 @@ def create_app():
         def delete(self):
             req_data = request.get_json()
             _user_id = ""
+            _user_email = ""
             token = req_data.get("token")
 
             if decodeJWT(token, keys[1]) is not False:
                 _user_id = extract_id(token, keys[1])
+                _user_email = extract_email(token, keys[1]).split("@")[0] + '/'
+                print(_user_email)
             else:
                 return {"sucess": False,
                         "msg": "Bad JWT token"}, 401
             GarageSales.query.filter_by(user_id=_user_id).delete()
+
+            print("REMOVING IMAGES")
+            user_folder = os.path.join(app.config['UPLOAD_FOLDER'], _user_email)
+            for file_name in os.listdir(user_folder):
+                  file = user_folder + file_name
+                  print(file)
+                  os.remove(file)
             
             print("other userID: ", _user_id)
             db.session.commit()
