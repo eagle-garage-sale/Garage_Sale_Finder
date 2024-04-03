@@ -13,17 +13,11 @@ export default function ShowListing(props)
 
     const formatTime = (timeString) => {
         const [hours, minutes] = timeString.split(':');
-    // Convert hours to integer
-    const hour = parseInt(hours, 10);
-    // Determine AM/PM based on hour
-    const amOrPm = hour >= 12 ? 'PM' : 'AM';
-    // Convert hour from military time to standard time
-    const formattedHour = hour % 12 || 12;
-    // Format minutes with leading zero if needed
-    const formattedMinutes = minutes.padStart(2, '0');
-    // Construct formatted time string
-    return `${formattedHour}:${formattedMinutes} ${amOrPm}`;
-
+        const hour = parseInt(hours, 10);
+        const amOrPm = hour >= 12 ? 'PM' : 'AM';
+        const formattedHour = hour % 12 || 12;
+        const formattedMinutes = minutes.padStart(2, '0');
+        return `${formattedHour}:${formattedMinutes} ${amOrPm}`;
     };
 
     const data = { name: 'Oz'};
