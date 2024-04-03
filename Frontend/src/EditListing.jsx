@@ -392,13 +392,13 @@ export function EditListing() {
                        inputFieldPosition="bottom"
                        autocomplete
                         />
-                     <div style={{ position: 'absolute', left: '18%', top: '90%',transform: 'translate(-50%, -50%)' }}>
+                     <div style={{ position: 'absolute', left: '18%', top: '120%',transform: 'translate(-50%, -50%)' }}>
                         <Components.Button onClick={handleButtonClick}>
                             Edit Listing
                      </Components.Button>
                     </div>
 
-                    <div style={{ position: 'absolute', left: '58%', top: '90%',transform: 'translate(-50%, -50%)', whiteSpace: 'nowrap'}}>
+                    <div style={{ position: 'absolute', left: '58%', top: '120%',transform: 'translate(-50%, -50%)', whiteSpace: 'nowrap'}}>
                         <Components.Button
                         onClick={DeleteButtonClick}
                         style={{
