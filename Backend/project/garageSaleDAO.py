@@ -10,11 +10,12 @@ from project.dbModels import GarageSales
 # This will be an object that is returned upon reading a valid record
 # from the GarageSale table
 class GarageSale():
-    def __init__(self, id, street_address, state, city, zip_code, 
+    def __init__(self, id, title, street_address, state, city, zip_code, 
                  user_id, start_date, end_date, 
                  open_time, close_time, description, tag, latitude, longitude):
         
         self.id = id
+        self.title = title
         self.street_address = street_address
         self.state = state
         self.city = city
@@ -44,7 +45,7 @@ class GarageSaleDAO():
     def GetGarageSaleBySaleId(self, saleId): 
         sale = GarageSales.query.filter_by(id = saleId).first()
         if sale:
-            return GarageSale(sale.id, sale.street_address, sale.state, 
+            return GarageSale(sale.id, sale.title, sale.street_address, sale.state, 
                               sale.city, sale.zip_code,
                               sale.user_id, sale.start_date,
                               sale.end_date, sale.open_time, sale.close_time,
@@ -58,7 +59,7 @@ class GarageSaleDAO():
         sale_collection = []
 
         for sale in sales:
-            entry = GarageSale(sale.id, sale.street_address, sale.state, 
+            entry = GarageSale(sale.id, sale.title, sale.street_address, sale.state, 
                               sale.city, sale.zip_code, sale.user_id, sale.start_date, 
                                sale.end_date, sale.open_time, sale.close_time, 
                                sale.description, sale.tag, sale.latitude, sale.longitude)
@@ -72,7 +73,7 @@ class GarageSaleDAO():
         sale_collection = []
 
         for sale in sales:
-            entry = GarageSale(sale.id, sale.street_address, sale.state, 
+            entry = GarageSale(sale.id, sale.title, sale.street_address, sale.state, 
                               sale.city, sale.zip_code, sale.user_id, sale.start_date, 
                                sale.end_date, sale.open_time, sale.close_time, 
                                sale.description, sale.tag, sale.latitude, sale.longitude)

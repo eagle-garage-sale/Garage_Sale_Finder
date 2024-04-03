@@ -16,7 +16,7 @@ export default function ListingPage() {
     const listing = collection.find(item => item.id === idToFind);
 
     const formatDate = (dateString) => {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', options);
     };
@@ -30,6 +30,7 @@ export default function ListingPage() {
         return `${formattedHour}:${formattedMinutes} ${amOrPm}`;
     };
 
+    const title = listing.title;
     const street_address = listing ? listing.street_address: '';
     const state = listing.state;
     const zip_code = listing.zip_code;
@@ -72,6 +73,7 @@ export default function ListingPage() {
             <Components.ScrollableContent>
 
             <Components.Container>
+            <Components.Title>{title}</Components.Title>
             <Components.Title>Address:</Components.Title>
             <Components.Info>{street_address}, {state} {zip_code}</Components.Info>
             <Components.Title>Dates and Time:</Components.Title>

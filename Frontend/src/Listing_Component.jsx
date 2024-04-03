@@ -6,8 +6,10 @@ export default function ShowListing(props)
 {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString();
-      };
+        const options = { timeZone: 'UTC' }; // Specify the time zone as UTC
+        return date.toLocaleDateString('en-US', options);
+    };
+    
 
     const formatTime = (timeString) => {
         const [hours, minutes] = timeString.split(':');
@@ -30,17 +32,17 @@ export default function ShowListing(props)
         <div className='listing-details' key={props.id}>
             <Link to={{ pathname: `/listingpage/${props.id}`, state: data }}>
             <h3>
-                 {props.street_address}, {props.state}
+                 {props.title}
             </h3>
             </Link>
+            <p><strong>
+                {props.street_address},  {props.state}
+            </strong></p>
             <p>
                 {formatDate(props.start_date)} - {formatDate(props.end_date)}
             </p>
             <p>
                 Hours: {formatTime(props.open_time)} - {formatTime(props.close_time)}
-            </p>
-            <p>
-                {props.description}
             </p>
             <p>
                 Tags: {props.tag}
