@@ -43,8 +43,6 @@ export default function Home() {
             <div className='listing-details'>
             {listings}
             </div>
-            <BigImage 
-            image={{}}></BigImage>
           </li>
         </ul>
       </div>  

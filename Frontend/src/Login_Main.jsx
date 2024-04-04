@@ -1,7 +1,8 @@
 import React, { Component, useState} from "react";
 import * as Components from './Login_Components';
 import {useNavigate } from "react-router-dom"
-
+import GetImageJSON from "./utils/GetImages";
+import buildImageArray from "./utils/BuildImageArray";
 
 function Login_Main() {
   const [signIn, toggle] = useState(true);
@@ -87,7 +88,11 @@ function Login_Main() {
     });
 };
     const isSignUpDisabled = password !== confirmPassword;
-
+    
+    GetImageJSON();
+    const images = buildImageArray();
+    console.log(images[0]);
+    
      return(
          <div className="center-content">
             <Components.Container>
@@ -143,7 +148,10 @@ function Login_Main() {
              </Components.OverlayContainer>
 
          </Components.Container>
+         <img src = {"data:image/jpeg;base64," + "/" + String(images[0])} alt="img" width="150px" height="150px"></img>
+
          </div>
+         
      )
 }
 
