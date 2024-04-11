@@ -21,20 +21,25 @@ export default function Home() {
 
   const [selectedTags, setSelectedTags] = useState([]);
 
-  const filteredListings = collection.filter(item => {
+  const listingsWithTags = collection.map(item => { //maps the arrays to exctracts tags from each listing
+    const tagsArray = item.tag ? item.tag.split(',').map(tag => tag.trim()) : []; //checks if tags exist
+    return { ...item, tags: tagsArray }; //Adds tags property to item
+  })
+
+  const filteredListings = listingsWithTags.filter(item => { //renders listings based on selected tags
     if (selectedTags.length === 0)
     {
       return true; //if no tags are entered, show all listings
     }
-    //return item.tag.some(tag => selectedTags.includes(tag)) //filters listing based on tags
-    return selectedTags.includes(item.tag);
+    return selectedTags.every(selectedTag => item.tags.includes(selectedTag));
   });
 
-  const listings = filteredListings.map(item=> (
+  const listings = filteredListings.map(item => (
     <ShowListing
-     key = {item.id}
-     {...item}/>
-  ));
+        key={item.id}
+        {...item}
+    />
+));
 
   const handleTagSelection = tags => {
     console.log('Selected tags:', tags);
