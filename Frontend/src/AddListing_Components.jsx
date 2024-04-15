@@ -24,6 +24,11 @@ export const Select = styled.select`
     color: #333;
   }
 `
+export const FormTitle = styled.h3`
+font-weight: bold;
+text-align: center;
+font-size: 30px;
+`;
 
 export const header = styled.div`
   background-color: #4caf50;
@@ -48,8 +53,8 @@ overflow-y: auto;
 overflow-x: hidden;
 width: 700px;
 max-width: 100%;
-max-height: calc(100vh - 100px);
-margin-top: 100px;
+max-height: calc(100vh - 300px);
+margin-top: 0px;
 justify-content: center;
 /* Add margin to space out the containers */
 `;
@@ -57,7 +62,7 @@ justify-content: center;
 export const CenteredWrapper = styled.div`
   display: flex;
   justify-content: center;
-  top-margin: 10px;
+  top-margin: 0px;
 `;
 
 export const DoubleContainer = styled.div`
@@ -168,8 +173,8 @@ resize: vertical; /* Allow vertical resizing, but not horizontal */
 
 export const Button = styled.button`
 border-radius: 20px;
-border: 1px solid #25E970;
-background-color: #25E970;
+border: 1px solid #00853E;
+background-color: #00853E;
 color: #ffffff;
 font-size: 18px;
 font-weight: bold;
@@ -188,7 +193,7 @@ transition: transform 80ms ease-in;
 `;
 
 export const Tag = styled.div`
-  background-color: #25E970;
+  background-color: #00853E;
   color: #ffffff;
   font-size: 12px;
   font-weight: bold;
@@ -205,6 +210,7 @@ export const Tag = styled.div`
 `;
 
 export const ScrollableContent = styled.div`
+  margin-top: 150px;
   max-height: 1000px; /* Set a fixed height for the scrollable content */
   overflow-y: auto; /* Enable vertical scrolling if content exceeds the fixed height */
 
