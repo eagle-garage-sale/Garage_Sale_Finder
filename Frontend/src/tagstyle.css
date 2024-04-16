@@ -15,7 +15,7 @@
   position: relative;
   overflow-y: auto;
   flex-wrap: wrap; /* Allow tags to wrap to the next line when needed */
-  max-width: 400; /* Limit the maximum width to 100% */
+  max-width: 500px; /* Limit the maximum width to 100% */
   height: 80px;
   display:flex;
 }
@@ -37,7 +37,7 @@
 /* Styles for selected tags */
 .ReactTags__selected span.ReactTags__tag {
   border: 1px solid #ddd;
-  background: #63bcfd;
+  background: #00853E;
   color: white;
   font-size: 12px;
   display: inline-block;
@@ -98,8 +98,8 @@
 .search-button {
   position: relative;
   margin-right: 2% !important;
-  margin-top: -44px !important;
-  background-color: #4CAF50; /* Green */
+  margin-top: -43.5px !important;
+  background-color: #00853E; /* Green */
   border: none;
   color: white;
   padding: 5px 5px;
@@ -113,6 +113,6 @@
 }
 
 button.search-button:hover {
-  background-color: #45a049; /* Darker green color on hover */
+  background-color: #045f08; /* Darker green color on hover */
 }
 

@@ -8,6 +8,7 @@ import profanity from 'leo-profanity';
 import axios from "axios";
 import * as FormData from "form-data";
 import buildObjectArray from './utils/BuildListingArray'
+import Navbar from './Navbar'
 
 
 function getDate() {
@@ -270,15 +271,14 @@ function AddListing() {
 
     return (
         <div className="form-text">
-            <Components.header>Add Garage Sale Listing</Components.header>
+            <Navbar/>
 
             <Components.CenteredWrapper>
-        
             <Components.ScrollableContent>
 
             <Components.Container>
                 <Components.Form>
-
+                    <Components.FormTitle>Add Garage Sale Listing</Components.FormTitle>
                     <Components.Title>Title</Components.Title>
                     <Components.TitleInput ref={titleInputRef} type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
                     {errors.title && <div style={{ color: 'red', marginTop: '1px' }}>{errors.title}</div>}
@@ -324,7 +324,7 @@ function AddListing() {
                     <Components.Title>Description</Components.Title>
                     <Components.DescriptionInput type='description' placeholder='500 Characters Max' value = {description} onChange={(e) => setDescription(e.target.value)}/>
                     {errors.description && <div style={{ color: 'red', marginTop: '1px' }}>{errors.description}</div>}
-                    <Components.Title>Keywords</Components.Title>
+                    <Components.Title>Tags</Components.Title>
                     {errors.tags && <div style={{color: 'red', marginTop: '1px' }}>{errors.tags}</div>}
                     <ReactTags
                        tags={tags}

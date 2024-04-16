@@ -17,7 +17,7 @@ export const header = styled.div`
 
 
 export const keywordContainer = styled.div`
-  margin-top: 165px;
+  margin-top: 150px;
   margin-left: 22px;
   
 `;

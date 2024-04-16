@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import GetListingsByIdJSON from './utils/GetListingsByID';
 import buildObjectArray from './utils/BuildListingArray';
 import { useNavigate } from "react-router-dom"
+import Navbar from './Navbar'
 
 function getDate() {
     const today = new Date();
@@ -326,7 +327,7 @@ export function EditListing() {
     return (
         <div className="form-text">
 
-            <Components.header>Edit Garage Sale Listing</Components.header>
+            <Navbar/>
 
             <Components.CenteredWrapper>
 
@@ -334,6 +335,7 @@ export function EditListing() {
 
             <Components.Container>
                 <Components.Form>
+                    <Components.FormTitle>Edit Garage Sale Listing</Components.FormTitle>
                     <Components.Title>Title</Components.Title>
                     <Components.TitleInput ref={titleInputRef} type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
                     {errors.title && <div style={{ color: 'red', marginTop: '1px' }}>{errors.title}</div>}
@@ -379,7 +381,7 @@ export function EditListing() {
                     <Components.Title>Description</Components.Title>
                     <Components.DescriptionInput type='description' placeholder='500 Characters Max' value = {description} onChange={(e) => setDescription(e.target.value)}/>
                     {errors.description && <div style={{ color: 'red', marginTop: '1px' }}>{errors.description}</div>}
-                    <Components.Title>Keywords</Components.Title>
+                    <Components.Title>Tags</Components.Title>
                     {errors.tags && <div style={{color: 'red', marginTop: '1px' }}>{errors.tags}</div>}
                     <ReactTags
                        tags={tags}
@@ -389,25 +391,18 @@ export function EditListing() {
                        handleAddition={handleAddition}
                        handleDrag={handleDrag}
                        handleTagClick={handleTagClick}
-                       inputFieldPosition="bottom"
+                       inputFieldPosition="top"
                        autocomplete
                         />
-                     <div style={{ position: 'absolute', left: '18%', top: '120%',transform: 'translate(-50%, -50%)' }}>
-                        <Components.Button onClick={handleButtonClick}>
-                            Edit Listing
-                     </Components.Button>
-                    </div>
+                    <Components.ButtonContainer>    
+                    <Components.EditButton onClick={handleButtonClick}>
+                        Edit Listing
+                    </Components.EditButton>
 
-                    <div style={{ position: 'absolute', left: '58%', top: '120%',transform: 'translate(-50%, -50%)', whiteSpace: 'nowrap'}}>
-                        <Components.Button
-                        onClick={DeleteButtonClick}
-                        style={{
-                            backgroundColor: "#F75E5B",
-                            border: "1px solid #F75E5B"}}
-                        >
-                            Delete Listing
-                        </Components.Button>
-                    </div>
+                    <Components.DeleteButton onClick={DeleteButtonClick}>
+                        Delete Listing
+                    </Components.DeleteButton>
+                    </Components.ButtonContainer>
                 </Components.Form>
             </Components.Container>
             

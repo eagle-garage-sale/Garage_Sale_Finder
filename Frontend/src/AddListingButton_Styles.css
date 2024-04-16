@@ -1,9 +1,9 @@
 button.listingbutton:hover {
-  background-color: #45a049; /* Darker green color on hover */
+  background-color: #045f08; /* Darker green color on hover */
 }
 
 button.listingbutton {
-  background-color: #4CAF50; /* Green */
+  background-color: #059c4c; /* Green */
   border: none;
   color: white;
   padding: 10px 20px;
@@ -11,7 +11,7 @@ button.listingbutton {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 0px 2px;
   cursor: pointer;
   border-radius: 4px;
 }

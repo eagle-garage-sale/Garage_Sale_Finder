@@ -1,15 +1,15 @@
 .navbar {
     position: fixed;
-    top: 0;
+    top: 10;
     width: 100%;
-    background-color: #70c773;
+    background-color: #00853E;
     color: white;
-    padding: 10px 20px;
+    padding: 5px 20px;
 }
 
 .login-button {
     margin: auto;
-    background-color: #70c773;
+    background-color: #00853E;
     color: white;
     padding: 8.6px 20px; 
     font-size: 16px; 
@@ -23,4 +23,20 @@
     transform: translateY(-1150%); /* Center vertically */
     z-index: 700;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+    margin-top: 30px;
+  }
+  .title a {
+    text-decoration: none;
+    color: inherit; /* Inherit color from parent (assuming it matches surrounding text) */
+  }
+
+.logo img {
+    margin-left: -10px;
+    margin-top: 20px;
+    float: left;
+    width: 80px; /* Adjust the width to your desired size */
+    height: auto; /* Maintain aspect ratio */
 }
