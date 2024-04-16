@@ -391,7 +391,7 @@ export function EditListing() {
                        handleAddition={handleAddition}
                        handleDrag={handleDrag}
                        handleTagClick={handleTagClick}
-                       inputFieldPosition="bottom"
+                       inputFieldPosition="top"
                        autocomplete
                         />
                     <Components.ButtonContainer>    

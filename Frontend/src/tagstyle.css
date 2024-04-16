@@ -15,7 +15,7 @@
   position: relative;
   overflow-y: auto;
   flex-wrap: wrap; /* Allow tags to wrap to the next line when needed */
-  max-width: 400; /* Limit the maximum width to 100% */
+  max-width: 500px; /* Limit the maximum width to 100% */
   height: 80px;
   display:flex;
 }
@@ -37,7 +37,7 @@
 /* Styles for selected tags */
 .ReactTags__selected span.ReactTags__tag {
   border: 1px solid #ddd;
-  background: #63bcfd;
+  background: #00853E;
   color: white;
   font-size: 12px;
   display: inline-block;
