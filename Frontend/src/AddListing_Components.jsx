@@ -26,15 +26,14 @@ export const Select = styled.select`
 `
 export const FormTitle = styled.h3`
 font-weight: bold;
-text-align: center;
+margin-left: 74px;
 font-size: 30px;
 `;
 
 export const header = styled.div`
-  background-color: #4caf50;
-  color: #f6f6f6;
   padding: 20px;
   position: fixed;
+  margin-top: 100px;
   top: 0;
   left: 0;
   width: 100%;
@@ -53,8 +52,8 @@ overflow-y: auto;
 overflow-x: hidden;
 width: 700px;
 max-width: 100%;
-max-height: calc(100vh - 300px);
-margin-top: 0px;
+max-height: calc(100vh - 160px);
+margin-top: 160px;
 justify-content: center;
 /* Add margin to space out the containers */
 `;
@@ -192,6 +191,53 @@ transition: transform 80ms ease-in;
 }
 `;
 
+export const EditButton = styled.button`
+border-radius: 20px;
+border: 1px solid #00853E;
+background-color: #00853E;
+color: #ffffff;
+font-size: 18px;
+font-weight: bold;
+padding: 12px 61px;
+margin: 8px auto;
+margin-left: 0px;
+letter-spacing: 1px;
+text-transform: uppercase;
+transition: transform 80ms ease-in;
+&:active{
+    transform: scale(0.95);
+}
+&:focus {
+    outline: none;
+}
+`;
+
+export const DeleteButton = styled.button`
+border-radius: 20px;
+border: 1px solid #F75E5B;
+background-color: #F75E5B;
+color: #ffffff;
+font-size: 18px;
+font-weight: bold;
+padding: 12px 45px;
+margin: 8px auto;
+margin-left: -119px;
+letter-spacing: 1px;
+text-transform: uppercase;
+transition: transform 80ms ease-in;
+&:active{
+    transform: scale(0.95);
+}
+&:focus {
+    outline: none;
+}
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
 export const Tag = styled.div`
   background-color: #00853E;
   color: #ffffff;
@@ -210,8 +256,8 @@ export const Tag = styled.div`
 `;
 
 export const ScrollableContent = styled.div`
-  margin-top: 150px;
-  max-height: 1000px; /* Set a fixed height for the scrollable content */
+
+  max-height: 9000px; /* Set a fixed height for the scrollable content */
   overflow-y: auto; /* Enable vertical scrolling if content exceeds the fixed height */
 
 `;

@@ -274,11 +274,11 @@ function AddListing() {
             <Navbar/>
 
             <Components.CenteredWrapper>
-            <Components.header>Add Garage Sale Listing</Components.header>
             <Components.ScrollableContent>
 
             <Components.Container>
                 <Components.Form>
+                    <Components.FormTitle>Add Garage Sale Listing</Components.FormTitle>
                     <Components.Title>Title</Components.Title>
                     <Components.TitleInput ref={titleInputRef} type='Title' placeholder='Title' value = {title} onChange={(e) => setTitle(e.target.value)}/>
                     {errors.title && <div style={{ color: 'red', marginTop: '1px' }}>{errors.title}</div>}

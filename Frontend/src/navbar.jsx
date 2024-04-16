@@ -9,10 +9,15 @@ export default function Navbar() {
     return (
         <nav className='navbar'>
             <div className='logo'>
+
+                <a href="/home">
                 <img src={logo} alt="Logo" />
+                </a>
             </div>
             <div className='title'>
+                <a href="/home">
                 <h1>Garage Sale Finder</h1>
+                </a>
             </div>
             <LogoffButton />
             <AddListingButton/>

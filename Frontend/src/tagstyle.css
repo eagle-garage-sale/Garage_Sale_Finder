@@ -98,8 +98,8 @@
 .search-button {
   position: relative;
   margin-right: 2% !important;
-  margin-top: -44px !important;
-  background-color: #4CAF50; /* Green */
+  margin-top: -43.5px !important;
+  background-color: #00853E; /* Green */
   border: none;
   color: white;
   padding: 5px 5px;
@@ -113,6 +113,6 @@
 }
 
 button.search-button:hover {
-  background-color: #45a049; /* Darker green color on hover */
+  background-color: #045f08; /* Darker green color on hover */
 }
 
