@@ -324,7 +324,7 @@ function AddListing() {
                     <Components.Title>Description</Components.Title>
                     <Components.DescriptionInput type='description' placeholder='500 Characters Max' value = {description} onChange={(e) => setDescription(e.target.value)}/>
                     {errors.description && <div style={{ color: 'red', marginTop: '1px' }}>{errors.description}</div>}
-                    <Components.Title>Keywords</Components.Title>
+                    <Components.Title>Tags</Components.Title>
                     {errors.tags && <div style={{color: 'red', marginTop: '1px' }}>{errors.tags}</div>}
                     <ReactTags
                        tags={tags}
