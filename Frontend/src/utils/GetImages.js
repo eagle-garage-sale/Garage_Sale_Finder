@@ -1,6 +1,6 @@
-export default function GetImageJSON() {
+export default function GetImageJSON(num) {
     let ImageJSON;
-    const garage_id = {garage_sale_id: 1};
+    const garage_id = {garage_sale_id: num};
     fetch('http://127.0.0.1:5000/garagesales/ImageViewer', {
         method: 'POST',
         headers: {

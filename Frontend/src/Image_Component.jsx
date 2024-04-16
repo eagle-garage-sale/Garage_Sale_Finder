@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 
-export default function Image(props) 
+export default function CustomImage(props) 
 {
     return (
         <div className='image-container' key={props.id}>

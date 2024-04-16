@@ -89,9 +89,6 @@ function Login_Main() {
 };
     const isSignUpDisabled = password !== confirmPassword;
     
-    GetImageJSON();
-    const images = buildImageArray();
-    console.log(images[0]);
     
      return(
          <div className="center-content">
@@ -148,7 +145,6 @@ function Login_Main() {
              </Components.OverlayContainer>
 
          </Components.Container>
-         <img src = {"data:image/jpeg;base64," + "/" + String(images[0])} alt="img" width="150px" height="150px"></img>
 
          </div>
          

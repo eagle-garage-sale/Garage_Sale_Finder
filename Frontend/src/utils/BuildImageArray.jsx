@@ -4,7 +4,11 @@ export default function buildImageArray() {
     const obj = JSON.parse(data)
     let collection = [];
     for (const jsonStr of obj) {
-        collection.push(jsonStr);
+
+        const entry = {
+            image: jsonStr
+        }
+        collection.push(entry);
     }
 
     return collection;

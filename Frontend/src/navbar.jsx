@@ -3,7 +3,7 @@ import LogoffButton from './LogoffButton';
 import AddListingButton from './AddListingButton';
 import EditListingButton from './EditListingButton';
 import './Navbar.css';
-import logo from './assets/images/logo.png'
+import logo from './assets/images/little.png'
 
 export default function Navbar() {
     return (

@@ -18,7 +18,6 @@ export default function Home() {
 
   GetListingJSON();
   const collection = buildObjectArray();
-
   const [selectedTags, setSelectedTags] = useState([]);
 
   const listingsWithTags = collection.map(item => { //maps the arrays to exctracts tags from each listing

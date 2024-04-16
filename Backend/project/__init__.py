@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 import base64
 import json
 from PIL import Image
+from io import BytesIO
 
 db = SQLAlchemy()
 
@@ -137,10 +138,17 @@ def create_app():
             #Go through the specified image folder and convert 
             for filename in image_names:
                 img = os.path.join(user_folder_path, filename)
-                with open(img, "rb") as f:
-                    encoded_image = base64.b64encode(f.read())
-                    base64_image_collection.append(encoded_image)
-                    print(encoded_image)
+                ##compress images first
+                compressed_img = Image.open(img)
+                compressed_img.thumbnail((300,150))
+                im_file = BytesIO()
+                compressed_img.save(im_file, format=compressed_img.format)
+                im_bytes = im_file.getvalue()
+    
+                encoded_image = base64.b64encode(im_bytes)
+                base64_image_collection.append(encoded_image)
+                print(compressed_img.size)
+             
 
             #Convert the base64_image_collection into JSON 
             json_str = "["
@@ -260,7 +268,6 @@ def create_app():
             #db.session.commit()
             return {'success': True, "msg":"Successfully deleted the garage sale list!"}, 200
 
-
     # Add new user
     @api.route('/api/users/register', endpoint = 'register')
     class Register(Resource):
@@ -373,6 +380,5 @@ def initialize_extensions(app):
     with app.app_context():
 
 
-        db.drop_all()
         db.create_all()
 
