@@ -310,7 +310,7 @@ export function EditListing() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log("Deletion Successful");
+                alert("Your garage sale has been deleted!");
             }
             else {
                 console.error(data.msg);

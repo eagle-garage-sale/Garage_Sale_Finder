@@ -5,6 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api, fields, Resource
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+import base64
+import json
+from PIL import Image
+from io import BytesIO
 
 db = SQLAlchemy()
 
@@ -45,10 +49,14 @@ def create_app():
     from project.JWT import CreateJWT, decodeJWT, extract_id, extract_email
     from project.geocoding import ObtainCoordinates, ObtainGeoCodingApiData
     from project.garageSaleDAO import GarageSaleDAO
+    from project.userRecordDAO import UserRecordDAO
 
     #This object is how we will manipulate our collection of garage sales in memory
     #It's also our way of converting this data to JSON for frontend delivery
     AccessGarageSales = GarageSaleDAO()
+
+    #This object is how we will manipulate user objects in memory
+    AccessUsers = UserRecordDAO()
 
     # api models ensure that data provided by front end matches these specifications. JSON keys must match the
     # names of these values in order for this to work.
@@ -86,23 +94,81 @@ def create_app():
     def hello():
         return {"msg": "HELLO!"}, 200
     
-    @app.route('/garagesales/addImage', methods=['POST', 'GET'])
-    def fileUpload():
+    @app.route('/garagesales/ImageUpload', methods=['POST'])
+    def imageHandler():
 
-        username = request.form.get("username")
-        
-        user_folder = os.path.join(app.config['UPLOAD_FOLDER'], username)
-        if request.method == 'POST':
-            file = request.files.getlist('file')
-            for f in file:
-                filename = secure_filename(f.filename)
-                if allowedFile(filename):
-                    f.save(os.path.join(user_folder, filename))
+        #Image uploads
+        if request.method == "POST":
+            username = request.form.get("username")
+            
+            user_folder = os.path.join(app.config['UPLOAD_FOLDER'], username)
+            if request.method == 'POST':
+                file = request.files.getlist('file')
+                for f in file:
+                    filename = secure_filename(f.filename)
+                    if allowedFile(filename):
+                        f.save(os.path.join(user_folder, filename))
+                    else:
+                        return jsonify({'message': 'File type not allowed'}), 400
+                return jsonify({"name": filename, "status": "success"})
+            else:
+                return jsonify({"status": "failed"})
+            
+    @app.route('/garagesales/ImageViewer', methods=['POST'])
+    def imageDownloader():
+        if request.method == "POST":
+
+            #Get json data (the garage sale id)
+            req_data = request.get_json()
+            print(req_data)
+
+            _garage_sale = req_data.get("garage_sale_id")
+
+            #Find user_id based on garage sale id
+            sale = AccessGarageSales.GetGarageSaleBySaleId(_garage_sale)
+            user_id = sale.user_id
+
+            #Get email through user_id
+            user = AccessUsers.GetUserById(user_id)
+            email = user.email.split("@")[0]
+            user_folder_path = os.path.join(app.config['UPLOAD_FOLDER'], email)
+            image_names = os.listdir(user_folder_path)
+            base64_image_collection = []
+
+            #Go through the specified image folder and convert 
+            for filename in image_names:
+                img = os.path.join(user_folder_path, filename)
+                ##compress images first
+                compressed_img = Image.open(img)
+                compressed_img.thumbnail((300,150))
+                im_file = BytesIO()
+                compressed_img.save(im_file, format=compressed_img.format)
+                im_bytes = im_file.getvalue()
+    
+                encoded_image = base64.b64encode(im_bytes)
+                base64_image_collection.append(encoded_image)
+                print(compressed_img.size)
+             
+
+            #Convert the base64_image_collection into JSON 
+            json_str = "["
+            i = 0
+            for image in base64_image_collection:
+                image = image.decode('utf-8')
+                print(type(image))
+                if len(base64_image_collection) > 1 and i < len(base64_image_collection) - 1:
+                    json_str += json.dumps(image) + ','
                 else:
-                    return jsonify({'message': 'File type not allowed'}), 400
-            return jsonify({"name": filename, "status": "success"})
-        else:
-            return jsonify({"status": "failed"})
+                    json_str += json.dumps(image)
+                i += 1
+
+            json_str +=']'
+        
+            return {"success": True,
+                        "images": json_str}, 200
+            
+
+    
 
     # POST: Add garage sale entry
     # DELETE: Delete garage sale from passed user id
@@ -174,14 +240,24 @@ def create_app():
         def delete(self):
             req_data = request.get_json()
             _user_id = ""
+            _user_email = ""
             token = req_data.get("token")
 
             if decodeJWT(token, keys[1]) is not False:
                 _user_id = extract_id(token, keys[1])
+                _user_email = extract_email(token, keys[1]).split("@")[0] + '/'
+                print(_user_email)
             else:
                 return {"sucess": False,
                         "msg": "Bad JWT token"}, 401
             GarageSales.query.filter_by(user_id=_user_id).delete()
+
+            print("REMOVING IMAGES")
+            user_folder = os.path.join(app.config['UPLOAD_FOLDER'], _user_email)
+            for file_name in os.listdir(user_folder):
+                  file = user_folder + file_name
+                  print(file)
+                  os.remove(file)
             
             print("other userID: ", _user_id)
             db.session.commit()
@@ -191,7 +267,6 @@ def create_app():
             #GarageSales.query.delete()
             #db.session.commit()
             return {'success': True, "msg":"Successfully deleted the garage sale list!"}, 200
-
 
     # Add new user
     @api.route('/api/users/register', endpoint = 'register')
@@ -295,9 +370,7 @@ def create_app():
             GarageSaleJSON = AccessGarageSales.convertGarageSaleListToJSON(salesCollection)
             print (GarageSaleJSON)
             return {'success': True, "msg":"Successfully got garage sale list by user ID!", "sales": GarageSaleJSON}, 200
-    #1. Get Sales from database and put into array
-    #2. Convert array to json
-    #3. Create an api route
+        
 
     return app
 
@@ -307,6 +380,5 @@ def initialize_extensions(app):
     with app.app_context():
 
 
-        db.drop_all()
         db.create_all()
 

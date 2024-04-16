@@ -220,7 +220,7 @@ function AddListing() {
             setProgress(prevState => {
                 return {...prevState, started: true}
             })
-            axios.post('http://127.0.0.1:5000/garagesales/addImage', fd, {
+            axios.post('http://127.0.0.1:5000/garagesales/ImageUpload', fd, {
     
                 onUploadProgress: (progressEvent) => { setProgress(prevState => {
                     return {...prevState, pc: progressEvent.progress*100}

@@ -5,16 +5,20 @@ import buildObjectArray from './utils/BuildListingArray';
 import GetListingJSON from './utils/GetListings';
 import Navbar from './Navbar';
 import {GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
+import buildImageArray from './utils/BuildImageArray';
+import CustomImage from './Image_Component';
+import GetImageJSON from './utils/GetImages';
+import './ListingPage.css';
 
 export default function ListingPage() {
     const { id } = useParams();
     const idToFind = parseInt(id, 10);
-
     GetListingJSON();
+    GetImageJSON(idToFind);
     const collection = buildObjectArray();
-    console.log(collection);
-    const listing = collection.find(item => item.id === idToFind);
+    const imageCollection = buildImageArray();
 
+    const listing = collection.find(item => item.id === idToFind);
     const formatDate = (dateString) => {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
         const date = new Date(dateString);
@@ -43,7 +47,12 @@ export default function ListingPage() {
     const latitude = parseFloat(listing.latitude);
     const longitude = parseFloat(listing.longitude);
 
-
+    const images = imageCollection.map(item=> (
+        <CustomImage
+            key={item.id}
+            {...item}
+            />
+    ))
     function Maps() {
         const { isLoaded, loadError } = useLoadScript({
             googleMapsApiKey: 'AIzaSyAVPNguzZzl6ZCrE4jFBLl-fsYp9B6iT90' // Replace 'YOUR_API_KEY' with your actual Google Maps API key
@@ -84,6 +93,10 @@ export default function ListingPage() {
             <Components.Title>Tags:</Components.Title>
             <Components.Info>{tag}</Components.Info>
             <Components.Title>Pictures:</Components.Title>
+            <div className = "images_container">
+            {images}
+            </div>
+
             </Components.Container>
 
             </Components.ScrollableContent>
