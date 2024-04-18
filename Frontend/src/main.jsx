@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Login_Main from './Login_Main';
 import Maps from './Maps';
 import Home from './Home';
@@ -10,7 +11,8 @@ import AddListing from './AddListing';
 import { EditListing, EditListingError } from './EditListing';
 import ListingPage from './ListingPage';
 
-const root = document.getElementById('root');
+const container = document.getElementById('root');
+const root = createRoot(container);
 const hasCurrentListing = true;           //temp. Will use to determine if user has a listing to edit.
 
 //delete this later. It is used to render button on top of login component
@@ -22,7 +24,7 @@ const hasCurrentListing = true;           //temp. Will use to determine if user 
 );
 */
 
-ReactDOM.render(
+root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login_Main />} />
@@ -35,5 +37,4 @@ ReactDOM.render(
 
     </Routes>
   </BrowserRouter>,
-  document.getElementById('root')
 );

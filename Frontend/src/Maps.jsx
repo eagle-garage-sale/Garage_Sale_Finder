@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GoogleMap, Marker, useLoadScript, InfoWindow} from '@react-google-maps/api';
+import { GoogleMap, Marker, useJsApiLoader, InfoWindow} from '@react-google-maps/api';
 import buildObjectArray from './utils/BuildListingArray';
 import MapMarker from './assets/images/little.png'
 import SaleMarker from './assets/images/sign.png'
@@ -12,7 +12,7 @@ const Maps = () => {
     return date.toLocaleDateString('en-US', options);
   };
 
-  const { isLoaded } = useLoadScript({
+  const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: 'AIzaSyAVPNguzZzl6ZCrE4jFBLl-fsYp9B6iT90',
   });
 

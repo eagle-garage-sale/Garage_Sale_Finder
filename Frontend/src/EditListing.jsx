@@ -42,17 +42,12 @@ export function EditListing() {
     const [errors, setErrors] = useState({});
 
     const titleInputRef = useRef(null); // Create a reference to the title input element
-
-    useEffect(() => {
-        // Set focus on the title input field when the component mounts
-        titleInputRef.current.focus();
-    }, []);
-
     const navigate = useNavigate();
 
     //fetch data listing and update state variables
     useEffect(() => {
         //parses and builds array of user's listing info
+        titleInputRef.current.focus();
         const unparsedUserData = GetListingsByIdJSON(document.cookie);
         const userData = JSON.parse(unparsedUserData);
         let collection = [];
@@ -63,7 +58,7 @@ export function EditListing() {
 
         console.log("Tested Parsed Dataed: ", collection);
 
-        console.log("Street address value: ", collection[0].street_address);
+        console.log("Street address value: ", collection[0]);
 
         //if there is userdata, populate the form.
         if (userData) {
@@ -250,7 +245,6 @@ export function EditListing() {
         .then(data => {
             if(data.success == true) {
                 console.log('Update successful');
-                window.location.reload();
             } else {
                 alert(data.msg);
                 console.error(data.msg);
@@ -260,7 +254,7 @@ export function EditListing() {
             console.error(error);
         });
 
-        navigate('/home');  
+        navigate('/home');
 
         }
 
