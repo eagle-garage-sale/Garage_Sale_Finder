@@ -333,7 +333,9 @@ def create_app():
                 token = CreateJWT(user.id, _email, _password, keys[1])
                 return {'success':True,  "msg":"login successful!", "jwt": token, "username": _email.split("@")[0]}, 200
             else:
-                return {"success":False, "msg":"Invalid email or password"}, 401
+                return {"success":False, "msg":"Invalid email or password"}
+            
+            
             
 
     

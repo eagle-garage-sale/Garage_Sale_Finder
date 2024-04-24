@@ -55,7 +55,17 @@ export function EditListing() {
     useEffect(() => {
         //parses and builds array of user's listing info
         const unparsedUserData = GetListingsByIdJSON(document.cookie);
+
+        //if there is no listing to edit
+
         const userData = JSON.parse(unparsedUserData);
+
+        if (!userData || userData.length === 0) {
+            alert("You do not have a listing to edit.");
+            navigate('/home');
+            return;
+        }
+
         let collection = [];
         for (const jsonStr of userData)
         {

@@ -29,23 +29,30 @@ function Login_Main() {
         },
         body: JSON.stringify(userData),
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error ('Network response was not ok');
+        }
+        return response.json();
+      })
     .then(data => {
       if (data.success) {
         console.log('Login successful');
         document.cookie = data.jwt;
         sessionStorage.setItem("username", data.username)
+        navigate('/home');
         window.location.reload();
         
         
       } else {
         console.error(data.msg);
+        alert('Login failed. Please check your credentials and try again');
       }
     })
     .catch(error => {
       console.error(error);
+      alert('An error occurred while trying to login. Please try again.');
     });
-    navigate('/home');
     
 
   };
